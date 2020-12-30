@@ -1,0 +1,27 @@
+Package: BatchEC
+Title: Evaluates and corrects batch effects in gene expression data
+Version: 0.0.1.0000
+Authors@R: c(person("Janki", "Insan", role = c("aut", "cre"),
+                    email = "jankinsan@gmail.com"),
+            person("Hari", "PS", email = "hari.ps@icr.ac.uk",
+                  role = c("aut")),
+            person("Anguraj", "Sadanandam", email = "anguraj.sadanandam@icr.ac.uk",
+                  role = c("aut")))
+Description: The package uses linear regression analysis to see if the batch is
+  associated with gene expression data and if the batch is associated, the gene
+  expression data is adjusted for batch effects using ComBat (sva package). The
+  batch-corrected data is then visualized and compared to the uncorrected data
+  using Principal Component Analysis (PCA) and k-means clustering. 
+Imports: cluster (>= 2.1.0),
+        ggplot2 (>= 3.3.2),
+        mclust(>= 5.4.6),
+        reshape2 (>= 1.4.4),
+        sva (>= 3.36.0)
+License: `use_mit_license()`, `use_gpl3_license()` or friends to
+    pick a license
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Suggests: 
+    testthat
