@@ -58,9 +58,8 @@ lin_reg <- function(data, batch.info, batch = "Batch")
   print(paste0("P-value for ", batch, " from PC1: ", p_val_PC1, " from PC2: ", p_val_PC2))
   p_val <- c(p_val_PC1, p_val_PC2)
 
-  #checking if both the p values are less than 0.05
-  max_p_val<- which.max(p_val)
-  if(max_p_val <0.05){
+  #checking if any of the p values are less than 0.05
+  if(pc_val_PC1 <0.05 || pc_val_PC2 <0.05){
     print("Batch is associated with the data")
     return(p_val)
   } else{
