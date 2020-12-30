@@ -60,9 +60,9 @@ lin_reg <- function(data, batch.info, batch = "Batch")
 
   #checking if both the p values are less than 0.05
   max_p_val<- which.max(p_val)
-  if(max_p_val >0.05){
+  if(max_p_val <0.05){
     print("Batch is associated with the data")
-    return(max_p_val)
+    return(p_val)
   } else{
     print("Batch is not associated with the data")
     return(NA)
