@@ -17,6 +17,10 @@ kmeans_PCA(exprData, batch.info, batch = "Batch", NameString = "", when)
 
 \item{when}{String indicating when the clustering is taking place (before batch correction or after batch correction?)}
 }
+\value{
+Returns the optimal number of clusters (k) that has the maximum average silhouette width
+and was used for clustering
+}
 \description{
 Clusters the data using k-means after finding the optimum number
 of clusters using the silhouette method and displays the results on a PCA plot

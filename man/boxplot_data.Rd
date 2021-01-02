@@ -20,7 +20,7 @@ correction. Default = "Batch"
 Rows are genes, columns are samples.}
 
 \item{exp2}{A dataframe containing gene expression values after adjustment
-for batch effects. #' Rows are genes, columns are samples.}
+for batch effects. Rows are genes, columns are samples.}
 }
 \description{
 Plots boxplots showing the change in gene expression after

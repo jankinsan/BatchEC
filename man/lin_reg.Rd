@@ -7,17 +7,14 @@
 lin_reg(data, batch.info, batch = "Batch")
 }
 \arguments{
-\item{data}{A matrix containing gene expression data. Row names should be
-samples and column names should be genes.}
+\item{data}{A matrix containing gene expression data. Row names should be samples and column names should be genes.}
 
-\item{batch.info}{A data frame containing the samples names and details of the
-batch they belong to.}
+\item{batch.info}{A data frame containing the samples names and details of the batch they belong to.}
 
 \item{batch}{Title of the batch the data is being corrected for.}
 }
 \value{
-Returns the p-value after linear regression analysis if the batch is
-associated with data.
+Returns the p-value associated with PC1 and PC2 after linear regression analysis
 }
 \description{
 Calculates Linear Regression of Principal Components 1 and 2 of the data
