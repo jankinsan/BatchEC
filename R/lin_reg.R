@@ -3,18 +3,14 @@
 #' @description Calculates Linear Regression of Principal Components 1 and 2 of the data
 #' to see if the batch is correlated to the data.
 #'
-#'
-#' @param data A matrix containing gene expression data. Row names should be
-#' samples and column names should be genes.
-#' @param batch.info A data frame containing the samples names and details of the
-#' batch they belong to.
+#' @param data A matrix containing gene expression data. Row names should be samples and column names should be genes.
+#' @param batch.info A data frame containing the samples names and details of the batch they belong to.
 #' @param batch Title of the batch the data is being corrected for.
 #'
 #' @import stats
 #'
 #'
-#' @return Returns the p-value after linear regression analysis if the batch is
-#' associated with data.
+#' @return Returns the p-value associated with PC1 and PC2 after linear regression analysis
 #'
 #' @export
 lin_reg <- function(data, batch.info, batch = "Batch")
@@ -58,14 +54,7 @@ lin_reg <- function(data, batch.info, batch = "Batch")
   print(paste0("P-value for ", batch, " from PC1: ", p_val_PC1, " from PC2: ", p_val_PC2))
   p_val <- c(p_val_PC1, p_val_PC2)
 
-  #checking if any of the p values are less than 0.05
-  if(pc_val_PC1 <0.05 || pc_val_PC2 <0.05){
-    print("Batch is associated with the data")
-    return(p_val)
-  } else{
-    print("Batch is not associated with the data")
-    return(NA)
-    }
+  return(p_val)
 }
 
 

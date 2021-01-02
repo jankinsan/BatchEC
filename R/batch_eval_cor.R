@@ -38,10 +38,10 @@ batch_eval_cor <- function(exprFile, batchFile, Batch, NameString = "", discrete
   #reading expression data from files
   print (paste0("Reading gene expression data from ", exprFile))
   exp1 <- read.table(exprFile,
-                      header = TRUE,
-                      stringsAsFactors = FALSE,
-                      row.names = 1,
-                      check.names=FALSE)
+                    header = TRUE,
+                    stringsAsFactors = FALSE,
+                    row.names = 1,
+                    check.names=FALSE)
 
   #reading batch information
   print (paste0("Reading batch data from ", batchFile))
@@ -62,10 +62,9 @@ batch_eval_cor <- function(exprFile, batchFile, Batch, NameString = "", discrete
   #linear regression
   p_val_before <- lin_reg(data=data1, batch.info = batch.info, batch=Batch)
 
-  if(is.na(p_val_before)){
-    print("Halting execution since the batch specified is not associated with data...")
-
-  } else {
+  #checking if any of the p values are less than 0.05
+  if(pc_val_before[1] <0.05 || pc_val_before[2] <0.05){
+    print("Batch is associated with the data")
 
     #pca with batch before correction
     pca_batch (data = data1,
@@ -76,11 +75,11 @@ batch_eval_cor <- function(exprFile, batchFile, Batch, NameString = "", discrete
                                   paste0("plot_", NameString, "_", Batch, "_pca_before_batch_correction.pdf")))
 
     #pca with batch and kmeans before batch correction
-    kmeans_PCA(exprData = data1,
-               batch.info = batch.info,
-               batch = Batch,
-               NameString = NameString,
-               when = "before_correction")
+    k_before <- kmeans_PCA(exprData = data1,
+                          batch.info = batch.info,
+                          batch = Batch,
+                          NameString = NameString,
+                          when = "before_correction")
 
     #Batch Correction using ComBat
     exp2 <- ComBat_data (exprData = exp1,
@@ -93,34 +92,44 @@ batch_eval_cor <- function(exprFile, batchFile, Batch, NameString = "", discrete
     pca_batch (data = data2,
                batch.info= batch.info,
                batch= Batch,
-               plotFile = ifelse( NameString =="",
+               plotFile = ifelse(NameString =="",
                                   paste0("plot_", Batch, "_pca_after_batch_correction.pdf"),
                                   paste0("plot_", NameString,"_", Batch, "_pca_after_batch_correction.pdf")))
 
     #pca with batch and k-means after correction
-    kmeans_PCA(exprData = data2,
-               batch.info = batch.info,
-               batch = Batch,
-               NameString = NameString,
-               when = "after_correction")
+    k_after <- kmeans_PCA(exprData = data2,
+                          batch.info = batch.info,
+                          batch = Batch,
+                          NameString = NameString,
+                          when = "after_correction")
 
+    #ensuring biological variability is not removed by checking k before and after correction
+    if (k_before == k_after){
     #PCA Proportion of Variation
     pca_prop_var(batch.title = Batch,
-                 plotFile = ifelse( NameString == "",
-                                    paste0("plot_pca_prop_var_", Batch, ".pdf"),
-                                    paste0(NameString, "_plot_pca_prop_var_", Batch, ".pdf")),
+                 plotFile = ifelse(NameString == "",
+                                  paste0("plot_pca_prop_var_", Batch, ".pdf"),
+                                  paste0(NameString, "_plot_pca_prop_var_", Batch, ".pdf")),
                  data1 = data1,
                  data2 = data2)
 
     #pearson correlation
     correlationPlot(data1 = data1,
-             data2 = data2,
-             batch = Batch,
-             fileName = NameString)
+                    data2 = data2,
+                    batch = Batch,
+                    fileName = NameString)
 
     #boxplots before and after batch correction
-    boxplot_data (expr1 = exp1, expr2 = exp2, NameString = NameString,
+    boxplot_data (expr1 = exp1,
+                  expr2 = exp2,
+                  NameString = NameString,
                   batch = Batch)
+    } else{
+      print ("Biological variability removed by ComBat correction, halting execution...")
+    }
+  } else{
+    print("Halting execution since the batch specified is not associated with data...")
+
   }
 
   print(sessionInfo())

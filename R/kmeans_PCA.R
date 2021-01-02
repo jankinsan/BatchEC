@@ -12,6 +12,9 @@
 #' @param NameString  string that will be appear in all output filenames. Default="" (empty string)
 #' @param when String indicating when the clustering is taking place (before batch correction or after batch correction?)
 #'
+#' @return Returns the optimal number of clusters (k) that has the maximum average silhouette width
+#' and was used for clustering
+#'
 #' @import grDevices
 #' @import stats
 #' @import utils
@@ -39,21 +42,26 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
 
   colnames(silh)<- c("k", "silh.width")
 
-  #writing avg sil width to file
+  #writing avg sil width to file and plotting the values
   date <- as.character(format(Sys.Date(), "%Y%m%d"))
   write.table(silh, file = paste0(date, "_", NameString, "_", when, "_avg_silhouette_width_k-means.txt"),
               sep = "\t")
+
+  plot_silh_file <- paste0(date, "_", NameString, "_", when, "_plot_optimal_clusters_silhouette_method.pdf")
+  pdf (plot_silh_file)
+  factoextra::fviz_nbclust(exprData, kmeans, method = "silhouette")
+  dev.off(which=dev.cur())
 
   #finding the k with maximum avg. silhouette width
   max.sil <- silh[which(silh[,2]==max(silh[,2])),]
   print(paste0("k=", max.sil[1], " has the maximum Average Silhouette Width = ",
                max.sil[2]))
-  i <- as.numeric(max.sil[1])
+  k <- as.numeric(max.sil[1])
 
 
   #clustering for optimal k
   print("Clustering data ...")
-  clustered_data <- kmeans(exprData, centers = i, iter.max = 100, nstart = 25,
+  clustered_data <- kmeans(exprData, centers = k, iter.max = 100, nstart = 25,
                            set.seed(12345))
   cluster.info <- cbind(names(clustered_data$cluster), clustered_data$cluster)
   write.table(cluster.info,
@@ -90,7 +98,7 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
                    y=PC2,
                    colour =Batch,
                    shape =kmeans_cluster), size=2)+
-    ggplot2::labs(title= paste0("PCA plot with kmeans information for k = ", i),
+    ggplot2::labs(title= paste0("PCA plot with kmeans information for k = ", k),
                   colour = "Batch",
                   shape = "k-means Cluster")+
     ggplot2::theme(
@@ -123,6 +131,6 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
 
   dev.off()
 
-
+  return (k)
 }
 
