@@ -13,6 +13,7 @@ Description: The package uses linear regression analysis to see if the batch is
   batch-corrected data is then visualized and compared to the uncorrected data
   using Principal Component Analysis (PCA) and k-means clustering. 
 Imports: cluster (>= 2.1.0),
+        factoextra(>= 1.0.7),
         ggplot2 (>= 3.3.2),
         mclust(>= 5.4.6),
         reshape2 (>= 1.4.4),
