@@ -72,7 +72,7 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
   }
 
     #pca with batch before correction
-    pca_batch (data = exprData1,
+    pca_batch (exprData = exprData1,
                batch.info= batch.info,
                batch= batch,
                plotFile = ifelse (NameString =="",
