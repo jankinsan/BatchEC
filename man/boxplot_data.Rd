@@ -2,27 +2,22 @@
 % Please edit documentation in R/boxplot_data.R
 \name{boxplot_data}
 \alias{boxplot_data}
-\title{Boxplots showing Gene Expression before and after correction}
+\title{Plots boxplots showing Gene Expression across samples}
 \usage{
-boxplot_data(expr1, expr2, NameString, batch = "Batch")
+boxplot_data(expr, when, NameString, batch = "Batch")
 }
 \arguments{
+\item{expr}{A dataframe containing gene expression values.
+Rows are genes, columns are samples. Could be the dataframe before or after correction}
+
+\item{when}{String indicating if the expression data is from before or after correction. Use "before" or "after"}
+
 \item{NameString}{String that will be added in all output filenames. Default=NA.}
 
 \item{batch}{The title of the batch for which you want to evaluate and do the
-correction. Default = "Batch"
-
-@import grDevices
-
-@export}
-
-\item{exp1}{A dataframe containing gene expression values before batch correction.
-Rows are genes, columns are samples.}
-
-\item{exp2}{A dataframe containing gene expression values after adjustment
-for batch effects. Rows are genes, columns are samples.}
+correction. Default = "Batch"}
 }
 \description{
-Plots boxplots showing the change in gene expression after
+Plots boxplots that can be used to see the change in gene expression after
 adjustment for batch effects using ComBat
 }

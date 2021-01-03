@@ -5,21 +5,21 @@
 #'
 #' @param batch.title The tile of the batch
 #' @param plotFile The PCA proportion of variation will be saved to this file
-#' @param data1 A matrix containing the gene Expression data before batch correction
-#' @param data2 A matrix containing the gene Expression data after batch correction
+#' @param exprData1 A matrix containing the gene Expression data before batch correction
+#' @param exprData2 A matrix containing the gene Expression data after batch correction
 #'
 #' @import grDevices
 #' @import stats
 #'
 #' @export
-pca_prop_var <- function(batch.title, plotFile, data1, data2){
+pca_prop_var <- function(batch.title, plotFile, exprData1, exprData2){
 
   print("===========================Plotting PCA Propotion of Variation=====================")
 
   #calculating the principal components
   print("Calculating Principal Components...")
-  pca1 <- prcomp(data1, center = TRUE, scale. = TRUE)
-  pca2 <- prcomp (data2, center = TRUE, scale. = TRUE)
+  pca1 <- prcomp(exprData1, center = TRUE, scale. = TRUE)
+  pca2 <- prcomp (exprData2, center = TRUE, scale. = TRUE)
 
   before_correction <- summary(pca1)$importance[2,]
   after_correction <- summary(pca2)$importance[2,]

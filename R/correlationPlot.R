@@ -4,8 +4,8 @@
 #' the expression data before and after batch correction and also plots a scatter
 #' plot to show the correlation.
 #'
-#' @param data1 A matrix containing the gene expression data before batch correction
-#' @param data2 A matrix containing the gene expression data after batch correction
+#' @param exprData1 A matrix containing the gene expression data before batch correction
+#' @param exprData2 A matrix containing the gene expression data after batch correction
 #' @param fileName String to be added to the name of the file to which correlation
 #'  scatter plot would be saved
 #' @param batch The tile of the batch
@@ -13,18 +13,18 @@
 #' @import grDevices
 #'
 #' @export
-correlationPlot<- function(data1, data2, fileName="", batch){
+correlationPlot<- function(exprData1, exprData2, fileName="", batch){
 
   print("===========================Plotting scatter plot to show correlation=====================")
 
   #matching sample IDs and Genes
-  mat_gene <- match(colnames(data1), colnames(data2))
-  mat_row <- match(row.names(data1), row.names(data2))
+  mat_gene <- match(colnames(exprData1), colnames(exprData2))
+  mat_row <- match(row.names(exprData1), row.names(exprData2))
 
   data2 <- data2[mat_row, mat_gene]
 
-  before_correction<- c(as.numeric(data1))
-  after_correction<- c(as.numeric(data2))
+  before_correction<- c(as.numeric(exprData1))
+  after_correction<- c(as.numeric(exprData2))
 
   #calculating correlation
   corr_coef <- cor(before_correction, after_correction)
@@ -45,7 +45,7 @@ correlationPlot<- function(data1, data2, fileName="", batch){
     ggplot2::geom_point() +
     ggplot2::labs(x = "Gene Expression before Correction",
          y = "Gene Expression after Correction",
-         title = "Sactterplot showing Correlation between data before and after batch correction",
+         title = "Scatterplot showing Correlation between data before and after batch correction",
          subtitle = paste("Pearson Correlation coefficient", "=", corr_coef, sep= " "))+
     ggplot2::theme(
 

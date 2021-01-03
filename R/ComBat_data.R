@@ -13,7 +13,7 @@
 #' @param batch The title of the batch for which you want to evaluate and do the
 #'  correction. Default = "Batch"
 #'
-#'  @import utils
+#' @import utils
 #'
 #'
 #' @return Returns a matrix containing the batch corrected values for gene expression.

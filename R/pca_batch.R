@@ -3,7 +3,7 @@
 #' @description Plots the first two principal components for all the samples of
 #'  a gene expression dataset along with the batch information
 #'
-#' @param data A matrix containing gene expression data. Row names should be
+#' @param exprData A matrix containing gene expression data. Row names should be
 #' samples and column names should be genes.
 #' @param batch.info A data frame containing the samples names and details of the
 #' batch they belong to.
@@ -15,17 +15,17 @@
 #'  @import graphics
 #'
 #' @export
-pca_batch <- function(data, batch.info, batch, plotFile){
+pca_batch <- function(exprData, batch.info, batch, plotFile){
 
   print("===========================Plotting PCs along with batch=====================")
 
   #matching sample IDs with batches
-  id <- as.numeric(rownames(data))
+  id <- as.numeric(rownames(exprData))
   s<- match (id, batch.info[,1])
 
   #calculating the principal components and adding the data to pca_data
   print("Calculating Principal Components...")
-  pca1 <- prcomp(data, center = TRUE, scale. = TRUE)
+  pca1 <- prcomp(exprData, center = TRUE, scale. = TRUE)
 
 
   pca_data <- cbind.data.frame(pca1$x[, 1:2], batch.info[s,2])

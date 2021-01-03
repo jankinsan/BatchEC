@@ -4,16 +4,16 @@
 \alias{pca_prop_var}
 \title{PCA Proportion of Variation}
 \usage{
-pca_prop_var(batch.title, plotFile, data1, data2)
+pca_prop_var(batch.title, plotFile, exprData1, exprData2)
 }
 \arguments{
 \item{batch.title}{The tile of the batch}
 
 \item{plotFile}{The PCA proportion of variation will be saved to this file}
 
-\item{data1}{A matrix containing the gene Expression data before batch correction}
+\item{exprData1}{A matrix containing the gene Expression data before batch correction}
 
-\item{data2}{A matrix containing the gene Expression data after batch correction}
+\item{exprData2}{A matrix containing the gene Expression data after batch correction}
 }
 \description{
 Calculates and plots the proportion of variation for twenty-five Principal Components of

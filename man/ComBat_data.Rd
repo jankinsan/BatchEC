@@ -15,9 +15,7 @@ the gene expression dataset,the first column should be sample names and the
 second column should contain the batches.}
 
 \item{batch}{The title of the batch for which you want to evaluate and do the
-correction. Default = "Batch"
-
-@import utils}
+correction. Default = "Batch"}
 
 \item{NameString}{String that will be added to the names of all output files. Default=NA.}
 }

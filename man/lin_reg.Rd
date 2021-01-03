@@ -4,10 +4,10 @@
 \alias{lin_reg}
 \title{Linear Regression of Principal Components}
 \usage{
-lin_reg(data, batch.info, batch = "Batch")
+lin_reg(exprData, batch.info, batch = "Batch")
 }
 \arguments{
-\item{data}{A matrix containing gene expression data. Row names should be samples and column names should be genes.}
+\item{exprData}{A matrix containing gene expression data. Row names should be samples and column names should be genes.}
 
 \item{batch.info}{A data frame containing the samples names and details of the batch they belong to.}
 

@@ -4,10 +4,10 @@
 \alias{pca_batch}
 \title{PCA Plot}
 \usage{
-pca_batch(data, batch.info, batch, plotFile)
+pca_batch(exprData, batch.info, batch, plotFile)
 }
 \arguments{
-\item{data}{A matrix containing gene expression data. Row names should be
+\item{exprData}{A matrix containing gene expression data. Row names should be
 samples and column names should be genes.}
 
 \item{batch.info}{A data frame containing the samples names and details of the

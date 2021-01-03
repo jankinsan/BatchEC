@@ -49,7 +49,7 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
 
   plot_silh_file <- paste0(date, "_", NameString, "_", when, "_plot_optimal_clusters_silhouette_method.pdf")
   pdf (plot_silh_file)
-  factoextra::fviz_nbclust(exprData, kmeans, method = "silhouette")
+  print(factoextra::fviz_nbclust(exprData, kmeans, method = "silhouette"))
   dev.off(which=dev.cur())
 
   #finding the k with maximum avg. silhouette width

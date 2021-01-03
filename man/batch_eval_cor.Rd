@@ -7,7 +7,7 @@
 batch_eval_cor(
   exprFile,
   batchFile,
-  Batch,
+  batch,
   NameString = "",
   discrete.batch = TRUE
 )
@@ -19,7 +19,7 @@ should be genes and columns should be samples.}
 \item{batchFile}{Path to the tab-delimited .txt file that contains the batch information.
 The first column should be sample names.}
 
-\item{Batch}{The title of the batch for which you want to evaluate and do the
+\item{batch}{The title of the batch for which you want to evaluate and do the
 correction. Default = "Batch"}
 
 \item{NameString}{String that will be added in all output filenames. Default=NA.}
