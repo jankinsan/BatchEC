@@ -15,21 +15,21 @@
 #' @export
 boxplot_data <- function(expr, when, NameString, batch = "Batch"){
 
-  print(paste0("================Plotting boxplots", when, "====================="))
+  print(paste0("================Plotting boxplot ", when, "====================="))
 
   #plotting gene expression
   data <- reshape2::melt(expr)
 
   if(when == "before"){
-  boxplot_expression <- ggplot2::ggplot(data, ggplot2::aes(x =variable,
-                                                                   y =value)) +
+  boxplot_expression <- ggplot2::ggplot(data, ggplot2::aes(x=variable,
+                                                          y= value)) +
     ggplot2::geom_boxplot(color = "blue4",
                           inherit.aes = TRUE,
                           outlier.size = 0.5,
                           outlier.color = "limegreen")+
     ggplot2::scale_x_discrete(guide = ggplot2::guide_axis(check.overlap = TRUE))+
 
-    ggplot2::labs(title = paste0("Gene Expression", when, "  Batch Correction"),
+    ggplot2::labs(title = paste0("Gene Expression ", when, " Batch Correction"),
                   x = "Samples",
                   y = "Expression") +
 
@@ -52,14 +52,14 @@ boxplot_data <- function(expr, when, NameString, batch = "Batch"){
   }
   else if (when == "after"){
     boxplot_expression <- ggplot2::ggplot(data, ggplot2::aes(x =variable,
-                                                  y =value)) +
+                                                              y =value)) +
       ggplot2::geom_boxplot(color = "red",
                             inherit.aes = TRUE,
                             outlier.size = 0.5,
                             outlier.color = "limegreen")+
       ggplot2::scale_x_discrete(guide = ggplot2::guide_axis(check.overlap = TRUE))+
 
-      ggplot2::labs(title = paste0("Gene Expression", when, " after Batch Correction"),
+      ggplot2::labs(title = paste0("Gene Expression ", when, " after Batch Correction"),
                     x = "Samples",
                     y = "Expression") +
 
@@ -94,5 +94,5 @@ boxplot_data <- function(expr, when, NameString, batch = "Batch"){
   pdf(plotFile)
   plot (boxplot_expression)
   dev.off()
-  print(paste0("Boxplot", when, "plotted to", plotFile))
+  print(paste0("Boxplot ", when, " Batch Correction plotted to ", plotFile))
 }

@@ -21,7 +21,7 @@ correlationPlot<- function(exprData1, exprData2, fileName="", batch){
   mat_gene <- match(colnames(exprData1), colnames(exprData2))
   mat_row <- match(row.names(exprData1), row.names(exprData2))
 
-  data2 <- data2[mat_row, mat_gene]
+  exprData2 <- exprData2[mat_row, mat_gene]
 
   before_correction<- c(as.numeric(exprData1))
   after_correction<- c(as.numeric(exprData2))

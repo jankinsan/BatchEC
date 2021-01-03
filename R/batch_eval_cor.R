@@ -105,7 +105,7 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
                                   paste0("plot_", NameString,"_", batch, "_pca_after_batch_correction.pdf")))
 
     #pca with batch and k-means after correction
-    k_after <- kmeans_PCA(exprData = data2,
+    k_after <- kmeans_PCA(exprData = exprData2,
                           batch.info = batch.info,
                           batch = batch,
                           NameString = NameString,
@@ -135,7 +135,7 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
                   when = "before",
                   NameString = NameString,
                   batch = batch)
-    boxplot_data (expr = expr2,
+    boxplot_data (expr = as.data.frame(expr2),
                   when = "after",
                   NameString = NameString,
                   batch = batch)
