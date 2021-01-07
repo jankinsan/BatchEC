@@ -64,6 +64,7 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
   clustered_data <- kmeans(exprData, centers = k, iter.max = 100, nstart = 25,
                            set.seed(12345))
   cluster.info <- cbind(names(clustered_data$cluster), clustered_data$cluster)
+  colnames(cluster.info)<- c("Samples", "Cluster")
   write.table(cluster.info,
               file= paste0(date, "_", NameString, "_", when,  "_k-means_cluster_info.txt"),
               sep = "\t")
