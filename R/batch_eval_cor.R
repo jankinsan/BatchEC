@@ -22,6 +22,7 @@
 #' contiguous, for example, used reads and useful reads in mClust. Default = TRUE
 #'
 #' @import utils
+#' @import mclust
 #'
 #' @examples
 #' \dontrun{
@@ -148,7 +149,7 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
 #mClust turns contiguous data into discrete batches for batch correction
 mclust_cluster <- function(data){
   yBIC2_Q <-mclust::mclustBIC(as.numeric(data),G=1:8)
-  rs2_Q <-summary(yBIC2_Q,as.numeric(data))
+  rs2_Q <-summary.mclustBIC(object = yBIC2_Q,data = as.numeric(data))
   tau_Q <-rs2_Q$classification
   return(tau_Q)
 }
