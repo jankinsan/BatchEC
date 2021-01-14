@@ -4,7 +4,7 @@
 \alias{pca_batch}
 \title{PCA Plot}
 \usage{
-pca_batch(exprData, batch.info, batch, plotFile)
+pca_batch(exprData, batch.info, batch, NameString = "", when = "")
 }
 \arguments{
 \item{exprData}{A matrix containing gene expression data. Row names should be
@@ -15,7 +15,9 @@ batch they belong to.}
 
 \item{batch}{Title of the batch the data is being corrected for.}
 
-\item{plotFile}{Name of the file in which the PCA is to be plotted.
+\item{NameString}{string that will be appear in all output filenames. Default="" (empty string)}
+
+\item{when}{String indicating for which dataset is the PCA plot being created
 
 @import grDevices
 @import stats
