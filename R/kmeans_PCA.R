@@ -75,7 +75,13 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
   pca.data <- prcomp(exprData, center = TRUE, scale. = TRUE)
 
   #matching sample IDs with batches
-  id <- as.numeric(rownames(exprData))
+  if (is.character(batch.info[,1])){
+    id <- as.character(rownames(exprData))
+
+  } else if (is.numeric(batch.info[,1])){
+    id <-as.numeric(rownames(exprData))
+  }
+
   mat1<- match (id, batch.info[,1])
   mat2<- match (id, as.numeric(cluster.info[,1]))
 

@@ -56,12 +56,24 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
 
   if (discrete.batch== FALSE){
     batch.info[,2] <- mclust_cluster(batch.info[,2])
+
+    #writing the batch cluster information to file
+    date <- as.character(format(Sys.Date(), "%Y%m%d"))
+    clusterInfoFile <- paste0(date, "_", NameString, "_", batch, "_cluster_info.txt")
+    print(paste0("Writing the batch information from mClust for ", batch, "to: ", clusterInfoFile))
+    write.table(batch.info,
+                file = clusterInfoFile,
+                sep = "\t",
+                col.names = TRUE,
+                row.names = FALSE)
   }
 
   exprData1 <- t(expr1)
 
   #linear regression before batch correction
-  p_val_before <- lin_reg(exprData=exprData1, batch.info = batch.info, batch=batch)
+  p_val_before <- lin_reg(exprData=exprData1,
+                          batch.info = batch.info,
+                          batch=batch)
 
   #checking if any of the p values are less than 0.05
   if(p_val_before[1] >0.05 && p_val_before[2] >0.05){
@@ -76,9 +88,8 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
     pca_batch (exprData = exprData1,
                batch.info= batch.info,
                batch= batch,
-               plotFile = ifelse (NameString =="",
-                                  paste0("plot_", batch, "_pca_before_batch_correction.pdf"),
-                                  paste0("plot_", NameString, "_", batch, "_pca_before_batch_correction.pdf")))
+               NameString = NameString,
+               when = "before_ComBat_correction")
 
     #pca with batch and kmeans before batch correction
     k_before <- kmeans_PCA(exprData = exprData1,
@@ -101,9 +112,8 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
     pca_batch (exprData = exprData2,
                batch.info= batch.info,
                batch= batch,
-               plotFile = ifelse(NameString =="",
-                                  paste0("plot_", batch, "_pca_after_batch_correction.pdf"),
-                                  paste0("plot_", NameString,"_", batch, "_pca_after_batch_correction.pdf")))
+               NameString = NameString,
+               when = "after_ComBat_correction")
 
     #pca with batch and k-means after correction
     k_after <- kmeans_PCA(exprData = exprData2,
@@ -125,7 +135,7 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
                  exprData1 = exprData1,
                  exprData2 = exprData2)
 
-    #pearson correlation
+    #pearson correlation scatter plot
     correlationPlot(exprData1 = exprData1,
                     exprData2 = exprData2,
                     batch = batch,

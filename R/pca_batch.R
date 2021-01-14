@@ -8,20 +8,28 @@
 #' @param batch.info A data frame containing the samples names and details of the
 #' batch they belong to.
 #' @param batch Title of the batch the data is being corrected for.
-#' @param plotFile Name of the file in which the PCA is to be plotted.
+#' @param NameString  string that will be appear in all output filenames. Default="" (empty string)
+#' @param when String indicating for which dataset is the PCA plot being created
 #'
 #'  @import grDevices
 #'  @import stats
 #'  @import graphics
 #'
 #' @export
-pca_batch <- function(exprData, batch.info, batch, plotFile){
+pca_batch <- function(exprData, batch.info, batch, NameString = "", when = ""){
 
   print("===========================Plotting PCs along with batch=====================")
 
   #matching sample IDs with batches
-  id <- as.numeric(rownames(exprData))
-  s<- match (id, batch.info[,1])
+  if (is.character(batch.info[,1])){
+    id <- as.character(rownames(exprData))
+    s<- match (id, batch.info[,1])
+
+  } else if (is.numeric(batch.info[,1])){
+    id <-as.numeric(rownames(exprData))
+    s<- match (id, batch.info[,1])
+  }
+
 
   #calculating the principal components and adding the data to pca_data
   print("Calculating Principal Components...")
@@ -35,13 +43,15 @@ pca_batch <- function(exprData, batch.info, batch, plotFile){
 
   #plot PCA
   date <- as.character(format(Sys.Date(), "%Y%m%d"))
-  plotFile <- paste0(date, "_", plotFile)
+  plotFile <- ifelse (NameString =="",
+                     paste0(date, "_plot_", batch, "_pca_", when, ".pdf"),
+                     paste0(date, "_plot_", NameString, "_", batch, "_pca_", when, ".pdf"))
   pdf (plotFile)
   pca_plot <- ggplot2::ggplot(data = pca_data) +
 
     ggplot2::geom_point(ggplot2::aes(x=PC1, y=PC2, colour =Batch))+
 
-    ggplot2::labs(title=paste("PCA with batch for", batch, sep = " "),
+    ggplot2::labs(title=paste("PCA with", batch, "information", sep = " "),
                   x = "PC1",
                   y = "PC2",
                   colour = batch)+
@@ -77,7 +87,7 @@ pca_batch <- function(exprData, batch.info, batch, plotFile){
   plot(pca_plot)
   dev.off()
 
-  print(paste0("Plotted PC1 & PC2 with batch in ", plotFile))
+  print(paste0("Plotted PC1 & PC2 with batch to ", plotFile))
 
 }
 

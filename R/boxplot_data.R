@@ -29,7 +29,7 @@ boxplot_data <- function(expr, when, NameString, batch = "Batch"){
                           outlier.color = "limegreen")+
     ggplot2::scale_x_discrete(guide = ggplot2::guide_axis(check.overlap = TRUE))+
 
-    ggplot2::labs(title = paste0("Gene Expression ", when, " Batch Correction"),
+    ggplot2::labs(title = paste0("Gene Expression ", when, " Correction for ", batch),
                   x = "Samples",
                   y = "Expression") +
 
