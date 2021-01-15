@@ -4,15 +4,15 @@
 \alias{ComBat_data}
 \title{Batch Correction using ComBat}
 \usage{
-ComBat_data(exprData, batch.info, batch = "Batch", NameString = "")
+ComBat_data(expr, batch.info, batch = "Batch", NameString = "")
 }
 \arguments{
-\item{exprData}{gene expression data to be corrected for batch effects. Row
-names should be genes and column names should be samples.}
+\item{expr}{gene expression data to be corrected for batch effects. Rows
+should be genes and columns should be samples.}
 
 \item{batch.info}{A data frame containing batch information corresponding to
 the gene expression dataset,the first column should be sample names and the
-second column should contain the batches.}
+second column should contain the batch the sample belongs to.}
 
 \item{batch}{The title of the batch for which you want to evaluate and do the
 correction. Default = "Batch"}
