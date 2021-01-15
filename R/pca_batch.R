@@ -54,7 +54,7 @@ pca_batch <- function(exprData, batch.info, batch, NameString = "", when = ""){
     ggplot2::labs(title=paste("PCA with", batch, "information", sep = " "),
                   x = "PC1",
                   y = "PC2",
-                  colour = batch)+
+                  colour = "Batch")+
 
     ggplot2::theme(
 

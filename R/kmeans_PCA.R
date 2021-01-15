@@ -77,13 +77,15 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
   #matching sample IDs with batches
   if (is.character(batch.info[,1])){
     id <- as.character(rownames(exprData))
+    mat1<- match (id, batch.info[,1])
+    mat2<- match (id, cluster.info[,1])
 
   } else if (is.numeric(batch.info[,1])){
     id <-as.numeric(rownames(exprData))
+    mat1<- match (id, batch.info[,1])
+    mat2<- match (id, as.numeric(cluster.info[,1]))
   }
 
-  mat1<- match (id, batch.info[,1])
-  mat2<- match (id, as.numeric(cluster.info[,1]))
 
 
   #combining PCs, batch information, K-means cluster information
@@ -105,7 +107,7 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
                    y=PC2,
                    colour =Batch,
                    shape =kmeans_cluster), size=2)+
-    ggplot2::labs(title= paste0("PCA plot with kmeans information for k = ", k),
+    ggplot2::labs(title= paste0("PCA plot for ", batch, "; k = ", k),
                   colour = "Batch",
                   shape = "k-means Cluster")+
     ggplot2::theme(

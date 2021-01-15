@@ -21,8 +21,15 @@ lin_reg <- function(exprData, batch.info, batch = "Batch")
   pca1 <- prcomp(exprData, center = TRUE, scale. = TRUE)
 
   #matching sample IDs with batches
-  id <- as.numeric(rownames(exprData))
-  s<- match (id, batch.info[,1])
+  if (is.character(batch.info[,1])){
+    id <- as.character(rownames(exprData))
+    s<- match (id, batch.info[,1])
+
+  } else if (is.numeric(batch.info[,1])){
+    id <-as.numeric(rownames(exprData))
+    s<- match (id, batch.info[,1])
+  }
+
 
   #Adding the principal components and batch information to pca_data
   pca_data <- cbind.data.frame(pca1$x[, 1:2], batch.info[s, 2])

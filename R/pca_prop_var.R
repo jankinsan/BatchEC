@@ -19,13 +19,16 @@ pca_prop_var <- function(batch.title, plotFile, exprData1, exprData2){
   #calculating the principal components
   print("Calculating Principal Components...")
   pca1 <- prcomp(exprData1, center = TRUE, scale. = TRUE)
-  pca2 <- prcomp (exprData2, center = TRUE, scale. = TRUE)
+  pca2 <- prcomp(exprData2, center = TRUE, scale. = TRUE)
 
   before_correction <- summary(pca1)$importance[2,]
   after_correction <- summary(pca2)$importance[2,]
 
   #making a dataframe from proportion of variation values
-  s <- data.frame(as.factor(names(before_correction)),before_correction, after_correction, row.names = 1:184)
+  s <- data.frame(as.factor(names(before_correction)),
+                  before_correction,
+                  after_correction,
+                  row.names = 1:dim(exprData1)[1])
   colnames(s)[1] <- "PC"
   s$PC <- factor(s$PC, levels = s$PC[order(s$before_correction, decreasing=TRUE)])
 

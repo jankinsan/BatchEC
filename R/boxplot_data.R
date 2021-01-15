@@ -91,7 +91,7 @@ boxplot_data <- function(expr, when, NameString, batch = "Batch"){
   }
 
   #plotting both the boxplots in a pdf file
-  pdf(plotFile)
+  pdf(plotFile, height= 6.5, width = 13)
   plot (boxplot_expression)
   dev.off()
   print(paste0("Boxplot ", when, " Batch Correction plotted to ", plotFile))

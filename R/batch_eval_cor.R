@@ -82,7 +82,6 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
   }else{
 
     print("Batch is associated with the data...")
-  }
 
     #pca with batch before correction
     pca_batch (exprData = exprData1,
@@ -151,7 +150,7 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
                   NameString = NameString,
                   batch = batch)
 
-
+  }
 
 }
 
