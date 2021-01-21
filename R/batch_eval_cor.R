@@ -36,7 +36,7 @@
 #' @export
 batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete.batch = TRUE){
 
-  #reading expression data from files
+  #reading expression data from file
   print (paste0("Reading gene expression data from ", exprFile))
   expr1 <- read.table(exprFile,
                     header = TRUE,
@@ -59,7 +59,7 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
 
     #writing the batch cluster information to file
     date <- as.character(format(Sys.Date(), "%Y%m%d"))
-    clusterInfoFile <- paste0(date, "_", NameString, "_", batch, "_cluster_info.txt")
+    clusterInfoFile <- paste0(date, "_", NameString, "_", batch, "_batch_info_mClust.txt")
     print(paste0("Writing the batch information from mClust for ", batch, "to: ", clusterInfoFile))
     write.table(batch.info,
                 file = clusterInfoFile,

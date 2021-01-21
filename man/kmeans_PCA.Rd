@@ -19,11 +19,11 @@ kmeans_PCA(exprData, batch.info, batch = "Batch", NameString = "", when)
 }
 \value{
 Returns the optimal number of clusters (k) that has the maximum average silhouette width
-and was used for clustering
+and was used for clustering and plotting.
 }
 \description{
 Clusters the data using k-means after finding the optimum number
 of clusters using the silhouette method and displays the results on a PCA plot
 saved to a file. The files containing the avg. silhouette width (for k = 2 to
-k = 7) and the cluster information re saved to the kmeans folder within the working directory
+k = 7) and the clustering information is saved to the k-means folder within the working directory
 }

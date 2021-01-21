@@ -3,7 +3,7 @@
 #' @description Clusters the data using k-means after finding the optimum number
 #' of clusters using the silhouette method and displays the results on a PCA plot
 #' saved to a file. The files containing the avg. silhouette width (for k = 2 to
-#' k = 7) and the cluster information re saved to the kmeans folder within the working directory
+#' k = 7) and the clustering information is saved to the k-means folder within the working directory
 #'
 #'
 #' @param exprData gene expression dataset (rows should be samples, column should be genes)
@@ -13,7 +13,7 @@
 #' @param when String indicating when the clustering is taking place (before batch correction or after batch correction?)
 #'
 #' @return Returns the optimal number of clusters (k) that has the maximum average silhouette width
-#' and was used for clustering
+#' and was used for clustering and plotting.
 #'
 #' @import grDevices
 #' @import stats
@@ -24,6 +24,10 @@
 kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", when){
 
   print(paste0("=========================== Performing k-means ", when, "====================="))
+
+  #creating folder to store k-means data
+  dir <- getwd()
+  dir.create(paste0(dir, "/", "kmeans_", when))
 
   #calculating distance matrix
   print ("Calculating distance matrix")
@@ -48,7 +52,7 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
               sep = "\t")
 
   plot_silh_file <- paste0(date, "_", NameString, "_", when, "_plot_optimal_clusters_silhouette_method.pdf")
-  pdf (plot_silh_file)
+  pdf (paste0(dir, "/", "kmeans_", when, "/", plot_silh_file))
   print(factoextra::fviz_nbclust(exprData, kmeans, method = "silhouette"))
   dev.off(which=dev.cur())
 
@@ -66,7 +70,7 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
   cluster.info <- cbind(names(clustered_data$cluster), clustered_data$cluster)
   colnames(cluster.info)<- c("Samples", "Cluster")
   write.table(cluster.info,
-              file= paste0(date, "_", NameString, "_", when,  "_k-means_cluster_info.txt"),
+              file= paste0(dir, "/", "kmeans_", when, "/", date, "_", NameString, "_", when,  "_k-means_cluster_info.txt"),
               sep = "\t")
 
 
@@ -97,10 +101,13 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
   pca_data[,4] <- as.factor(pca_data[,4])
 
   #plotting PCA with batch along with kmeans information for k
-  plotFile <- paste0(date, "_", NameString, "_", batch, "_pca_with_kmeans_info_", when, ".pdf")
-
+  if (NameString==""){
+    plotFile <- paste0(date, "_", batch, "_pca_with_kmeans_info_", when, ".pdf")
+  } else{
+    plotFile <- paste0(date, "_", NameString, "_", batch, "_pca_with_kmeans_info_", when, ".pdf")
+  }
   print(paste0("Plotting Principal Components along with clustering information to the file ", plotFile))
-  pdf (plotFile)
+  pdf ( plotFile)
   kmeans_pca_plot <- ggplot2::ggplot(data = pca_data) +
 
     ggplot2::geom_point(ggplot2::aes(x=PC1,

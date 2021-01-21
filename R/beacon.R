@@ -43,7 +43,7 @@ beacon <- function(expr1, batch.info, batch, NameString = "", discrete.batch = T
 
     #writing the batch cluster information to file
     date <- as.character(format(Sys.Date(), "%Y%m%d"))
-    clusterInfoFile <- paste0(date, "_", NameString, "_", batch, "_cluster_info.txt")
+    clusterInfoFile <- paste0(date, "_", NameString, "_", batch, "_batch_info_mClust.txt")
     print(paste0("Writing the batch information from mClust for ", batch, "to: ", clusterInfoFile))
     write.table(batch.info,
                 file = clusterInfoFile,
