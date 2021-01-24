@@ -8,6 +8,7 @@ install_github("jankinsan/BatchEC")
 library(BatchEC)
 
 ***#if input is to be given as tab delimited text files***
+
 batch_eval_cor(
   exprFile = "~filepath.txt",
   batchFile = "~filepath2.txt",
@@ -16,6 +17,7 @@ batch_eval_cor(
   discrete.batch = TRUE)
 
 ***#if input objects already exist in the R environment***
+
 beacon(expr1, 
 batch.info, 
 batch,
