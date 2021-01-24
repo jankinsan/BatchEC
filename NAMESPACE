@@ -2,6 +2,7 @@
 
 export(ComBat_data)
 export(batch_eval_cor)
+export(beacon)
 export(boxplot_data)
 export(correlationPlot)
 export(kmeans_PCA)
