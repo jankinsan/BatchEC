@@ -8,7 +8,10 @@ install_github("jankinsan/BatchEC")
 library(BatchEC)
 
 # Functions
-batch_eval_cor   Batch effects evaluation and correction
+batch_eval_cor    Batch effects evaluation and correction from files. Both the files (containing the Expression data and the batch information should be tab-delimited text files.)
+
+
+beacon            Batch effects evaluation and correction from objects loaded in the workspace.
 
 
 boxplot_data      Plots boxplots showing Gene Expression across samples
@@ -30,3 +33,19 @@ pca_batch           PCA Plot with batch information
 
 
 pca_prop_var        PCA Proportion of Variation
+
+# Usage 
+
+batch_eval_cor(
+  exprFile = "~filepath.txt",
+  batchFile = "~filepath2.txt",
+  batch,
+  NameString = "",
+  discrete.batch = TRUE)
+
+beacon(expr1, 
+batch.info, 
+batch,
+NameString = "",
+discrete.batch = TRUE)
+	where expr1 is gene expression data; rows should be genes and columns should be samples.
