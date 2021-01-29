@@ -16,6 +16,7 @@
 lin_reg <- function(exprData, batch.info, batch = "Batch")
 {
   print("===========================Linear Regression Analysis=====================")
+
   #calculating the principal components
   print("Calculating Principal Components...")
   pca1 <- prcomp(exprData, center = TRUE, scale. = TRUE)
@@ -38,19 +39,19 @@ lin_reg <- function(exprData, batch.info, batch = "Batch")
   print("Performing Linear Regression Analysis...")
 
   #linear regression using PC1
-  pc.lm1 <- lm(formula = pca_data$PC1 ~ as.factor(pca_data$Batch))
-  print(summary(pc.lm1))
+  pc1.lm <- lm(formula = pca_data$PC1 ~ as.factor(pca_data$Batch))
+  print(summary(pc1.lm))
 
   #retrieving p value
-  f_stat_1<- summary(pc.lm1)$fstatistic
+  f_stat_1<- summary(pc1.lm)$fstatistic
   p_val_PC1 <- pf(f_stat_1[1], f_stat_1[2], f_stat_1[3], lower.tail = FALSE)
 
   #linear regression using PC2
-  pc.lm2 <- lm(formula = pca_data$PC2 ~ as.factor(pca_data$Batch))
-  print(summary(pc.lm2))
+  pc2.lm <- lm(formula = pca_data$PC2 ~ as.factor(pca_data$Batch))
+  print(summary(pc2.lm))
 
   #retrieving p value
-  f_stat_2<- summary(pc.lm2)$fstatistic
+  f_stat_2<- summary(pc2.lm)$fstatistic
   p_val_PC2 <- pf(f_stat_2[1], f_stat_2[2], f_stat_2[3],
                   lower.tail = FALSE)
 

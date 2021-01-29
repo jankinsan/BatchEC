@@ -9,17 +9,17 @@
 #' The directory should contain the input files.
 #'
 #'
-#' @param exprFile   File name of tab-delimited .txt file that contains the expression data. In the file, rows
-#' should be genes and columns should be samples.
-#' @param batchFile Path to the tab-delimited .txt file that contains the batch information.
-#' The first column should be sample names.
+#' @param exprFile Path to .txt (tab-delimited) or a .csv file that contains the expression data. In the file, rows
+#' should be genes and columns should be sample IDs.
+#' @param batchFile Path to the .txt (tab-delimited) or a .csv file that contains the batch information.
+#' The first column should be sample names/IDs
 #' @param batch The title of the batch for which you want to evaluate and do the
 #'  correction. Default = "Batch"
-#' @param NameString  String that will be added in all output filenames. Default=NA.
-#' @param discrete.batch Logical value indicating whether the samples are already
+#' @param NameString  String that will be added in to all output filenames. Default="".
+#' @param discrete.batch Logical value, indicating whether the samples are already
 #' grouped in discrete batches. If the value is FALSE, contiguous batch information is
-#' clustered into discrete batches. Useful for clustering batch variables that are
-#' contiguous, for example, used reads and useful reads in mClust. Default = TRUE
+#' clustered into discrete batches using mClust. Useful for clustering batch variables that are
+#' contiguous. Default = TRUE
 #'
 #' @import utils
 #' @import mclust
@@ -38,18 +38,40 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
 
   #reading expression data from file
   print (paste0("Reading gene expression data from ", exprFile))
-  expr1 <- read.table(exprFile,
-                    header = TRUE,
-                    stringsAsFactors = FALSE,
-                    row.names = 1,
-                    check.names=FALSE)
+  if (length(grep(pattern = ".txt", exprFile)) ==1){
+    expr1 <- read.table(exprFile,
+                        header = TRUE,
+                        stringsAsFactors = FALSE,
+                        row.names = 1,
+                        sep= "\t",
+                        check.names=FALSE)
+  } else if (length(grep(pattern = ".csv", exprFile)) ==1){
+    expr1 <- read.csv(exprFile,
+                        header = TRUE,
+                        stringsAsFactors = FALSE,
+                        row.names = 1,
+                        check.names=FALSE)
+  } else{
+    stop("exprFile is not a csv or tab-delimited file")
+  }
+
+
 
   #reading batch information
   print (paste0("Reading batch data from ", batchFile))
-  batch.info <- read.table(batchFile,
-                           header = TRUE,
-                           stringsAsFactors = FALSE,
-                           sep = "\t")
+  if (length(grep(pattern = ".txt", batchFile)) ==1){
+    batch.info <- read.table(batchFile,
+                             header = TRUE,
+                             stringsAsFactors = FALSE,
+                             sep = "\t")
+  } else if (length(grep(pattern = ".csv", batchFile)) ==1){
+    batch.info <- read.csv(batchFile,
+                             header = TRUE,
+                             stringsAsFactors = FALSE)
+  } else{
+    stop("batchFile is not a csv or tab-delimited file")
+  }
+
   #matching batch
   mat <- match(batch, colnames(batch.info))
   batch.info <- batch.info [,c(1, mat)]
@@ -68,8 +90,16 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
                 row.names = FALSE)
   }
 
-  exprData1 <- t(expr1)
+  #removing genes with zero variance
+  std_genes <- apply(expr1, MARGIN =1, sd)
+  genes_sd_0 <- length(which (std_genes ==0))
+  remgenes <- length (std_genes) - genes_sd_0
+  expr1 <- expr1[which (std_genes > 0),]
+  print(paste0("Removed ", genes_sd_0, " genes with zero variance..."))
+  print (paste0(remgenes, " genes remain..."))
 
+
+  exprData1 <- t(expr1)
   #linear regression before batch correction
   p_val_before <- lin_reg(exprData=exprData1,
                           batch.info = batch.info,
@@ -77,7 +107,7 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
 
   #checking if any of the p values are less than 0.05
   if(p_val_before[1] >0.05 && p_val_before[2] >0.05){
-    stop("Halting execution since the batch specified is not associated with data...")
+    stop("Halting execution since batch is not associated with data...")
 
   }else{
 

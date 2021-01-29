@@ -14,7 +14,7 @@
 #' @export
 pca_prop_var <- function(batch.title, plotFile, exprData1, exprData2){
 
-  print("===========================Plotting PCA Propotion of Variation=====================")
+  print("===========================Plotting PCA Proportion of Variation=====================")
 
   #calculating the principal components
   print("Calculating Principal Components...")
@@ -36,17 +36,17 @@ pca_prop_var <- function(batch.title, plotFile, exprData1, exprData2){
   print("Plotting Proportion of Variation")
   date <- as.numeric(format(Sys.Date(), "%Y%m%d"))
   pdf(paste0(date, "_", plotFile))
-  prop_var_plot <- ggplot2::ggplot(data=s[1:25,])+
+  prop_var_plot <- ggplot2::ggplot(data=s[1:15,])+
 
     ggplot2::geom_point(ggplot2::aes(PC, before_correction, group=1, colour ="blue"),
-               show.legend = TRUE)+
+               show.legend = TRUE, size =4, shape =1)+
 
-    ggplot2::geom_path(size=1, ggplot2::aes(PC, before_correction, group=1, colour ="blue"))+
+    ggplot2::geom_path(size=3, ggplot2::aes(PC, before_correction, group=1, colour ="blue"))+
 
     ggplot2::geom_point(ggplot2::aes(PC, after_correction, colour ="red", group = 2),
-               show.legend = TRUE)+
+               show.legend = TRUE, size =4, shape =1)+
 
-    ggplot2::geom_path(size=1, ggplot2::aes(PC, after_correction, group=2, colour ="red" ))+
+    ggplot2::geom_path(size=3, ggplot2::aes(PC, after_correction, group=2, colour ="red" ))+
 
 
     ggplot2::scale_colour_manual(values =c("blue"="blue",'red'='red'),
@@ -60,15 +60,16 @@ pca_prop_var <- function(batch.title, plotFile, exprData1, exprData2){
       #adjusting axis lines and text
       axis.line.x = ggplot2::element_line(size =0.75),
       axis.line.y = ggplot2::element_line(size =0.75),
-      axis.text.x = ggplot2::element_text(angle = 90, size=8.5, colour ="black"),
-      axis.text.y = ggplot2::element_text(size=8.5, colour ="black"),
+      axis.text.x = ggplot2::element_text(angle = 90, size=15, colour ="black"),
+      axis.text.y = ggplot2::element_text(size=15, colour ="black"),
 
       #Center align the title
-      plot.title = ggplot2::element_text(face = "bold", hjust =0.5),
+      plot.title = ggplot2::element_text(face = "bold", hjust =0.5, size =30),
 
-      #remove legend title
+      #modify legend
       legend.title = ggplot2::element_blank(),
-      legend.text = ggplot2::element_text(size = 10),
+      legend.text = ggplot2::element_text(size = 15),
+      legend.position = c(0.8, 0.8),
 
       # Adjust panel border
       panel.border = ggplot2::element_blank(),

@@ -24,10 +24,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' beacon(exprFile = "~/exprData.txt",
-#'                batchFile = "~/batchData.txt",
-#'                Batch = "Batch",
-#'                discrete.batch = TRUE)
+#' beacon(expr1 = dataset,
+#'        batch.info = batch_info,
+#'        batch = "Batch",
+#'        discrete.batch = TRUE)
 #' }
 #'
 #'
@@ -44,13 +44,23 @@ beacon <- function(expr1, batch.info, batch, NameString = "", discrete.batch = T
     #writing the batch cluster information to file
     date <- as.character(format(Sys.Date(), "%Y%m%d"))
     clusterInfoFile <- paste0(date, "_", NameString, "_", batch, "_batch_info_mClust.txt")
-    print(paste0("Writing the batch information from mClust for ", batch, "to: ", clusterInfoFile))
+    print(paste0("Writing the batch information from mClust for ", batch, " to: ", clusterInfoFile))
     write.table(batch.info,
                 file = clusterInfoFile,
                 sep = "\t",
                 col.names = TRUE,
                 row.names = FALSE)
   }
+
+  #removing genes with zero variance
+  std_genes <- apply(expr1, MARGIN =1, sd)
+  genes <- names(which (std_genes > 0))
+  genes_sd_0 <- length(which (std_genes ==0))
+  remgenes <- length (std_genes) - genes_sd_0
+  matObj <- match(genes, row.names(expr1))
+  expr1 <- expr1[matObj,]
+  print(paste0("Removed ", genes_sd_0, " genes with zero variance..."))
+  print (paste0(remgenes, " genes remain..."))
 
   exprData1 <- t(expr1)
 

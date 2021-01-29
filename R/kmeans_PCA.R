@@ -36,13 +36,7 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
   #using the silhouette method for determining the optimal number of clusters for k-means
   print ("Determining the optimal number of clusters for k-means...")
   silh <- data.frame()
-  for (k in 2:7){
-  cluster<- kmeans(exprData, centers = k, iter.max = 100, nstart = 25,
-                           set.seed(12345))
-  sil.data <- cluster::silhouette(cluster$cluster, distMatrix)
-  value <- c(k, mean(sil.data[,3]))
-  silh <- rbind (silh, value)
-  }
+  cluster_data<- lapply(c(2:7), cluster.km)
 
   colnames(silh)<- c("k", "silh.width")
 
@@ -60,13 +54,12 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
   max.sil <- silh[which(silh[,2]==max(silh[,2])),]
   print(paste0("k=", max.sil[1], " has the maximum Average Silhouette Width = ",
                max.sil[2]))
-  k <- as.numeric(max.sil[1])
+  optimal.k <- as.numeric(max.sil[1])
 
 
   #clustering for optimal k
   print("Clustering data ...")
-  clustered_data <- kmeans(exprData, centers = k, iter.max = 100, nstart = 25,
-                           set.seed(12345))
+  clustered_data<-cluster_data[[k-1]]
   cluster.info <- cbind(names(clustered_data$cluster), clustered_data$cluster)
   colnames(cluster.info)<- c("Samples", "Cluster")
   write.table(cluster.info,
@@ -113,7 +106,7 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
     ggplot2::geom_point(ggplot2::aes(x=PC1,
                    y=PC2,
                    colour =Batch,
-                   shape =kmeans_cluster), size=2)+
+                   shape =kmeans_cluster), size=6, alpha = 0.6)+
     ggplot2::labs(title= paste0("PCA plot for ", batch, "; k = ", k),
                   colour = "Batch",
                   shape = "k-means Cluster")+
@@ -150,3 +143,11 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
   return (k)
 }
 
+#clustering data for various k
+cluster.km <- function(k){
+
+  kmeans(exprData, centers= k, iter.max = 500, nstart=25, set.seed(12345))
+  sil.data <- cluster::silhouette(cluster[[k-1]]$cluster, distMatrix)
+  value <- c(k, mean(sil.data[,3]))
+  silh <- rbind (silh, value)
+}

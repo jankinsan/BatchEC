@@ -49,7 +49,7 @@ pca_batch <- function(exprData, batch.info, batch, NameString = "", when = ""){
   pdf (plotFile)
   pca_plot <- ggplot2::ggplot(data = pca_data) +
 
-    ggplot2::geom_point(ggplot2::aes(x=PC1, y=PC2, colour =Batch))+
+    ggplot2::geom_point(size =6, alpha= 0.6, ggplot2::aes(x=PC1, y=PC2, colour =Batch))+
 
     ggplot2::labs(title=paste("PCA with", batch, "information", sep = " "),
                   x = "PC1",
@@ -61,11 +61,11 @@ pca_batch <- function(exprData, batch.info, batch, NameString = "", when = ""){
       #adjusting axis lines and text
       axis.line.x = ggplot2::element_line(size =0.75),
       axis.line.y = ggplot2::element_line(size =0.75),
-      axis.text.x = ggplot2::element_text(angle = 90, size=8.5, colour ="black"),
-      axis.text.y = ggplot2::element_text(size=8.5, colour ="black"),
+      axis.text.x = ggplot2::element_text(angle = 90, size=15, colour ="black"),
+      axis.text.y = ggplot2::element_text(size=15, colour ="black"),
 
       #Center align the title
-      plot.title = ggplot2::element_text(face = "bold", hjust =0.5),
+      plot.title = ggplot2::element_text(face = "bold", hjust =0.5, size =30),
 
       #remove legend title
       legend.title = ggplot2::element_blank(),
