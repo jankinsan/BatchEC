@@ -39,12 +39,12 @@ pca_prop_var <- function(batch.title, plotFile, exprData1, exprData2){
   prop_var_plot <- ggplot2::ggplot(data=s[1:15,])+
 
     ggplot2::geom_point(ggplot2::aes(PC, before_correction, group=1, colour ="dogerblue3"),
-               show.legend = TRUE, size =3, shape =1)+
+               show.legend = TRUE, size =3)+
 
     ggplot2::geom_path(size=1.5, ggplot2::aes(PC, before_correction, group=1, colour ="dodgerblue3"))+
 
     ggplot2::geom_point(ggplot2::aes(PC, after_correction, colour ="orange", group = 2),
-               show.legend = TRUE, size =3, shape =1)+
+               show.legend = TRUE, size =3)+
 
     ggplot2::geom_path(size=1.5, ggplot2::aes(PC, after_correction, group=2, colour ="orange" ))+
 
