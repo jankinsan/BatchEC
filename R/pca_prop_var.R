@@ -38,18 +38,18 @@ pca_prop_var <- function(batch.title, plotFile, exprData1, exprData2){
   pdf(paste0(date, "_", plotFile))
   prop_var_plot <- ggplot2::ggplot(data=s[1:15,])+
 
-    ggplot2::geom_point(ggplot2::aes(PC, before_correction, group=1, colour ="dogerblue3"),
-               show.legend = TRUE, size =3)+
+    ggplot2::geom_point(show.legend = TRUE, size =3,
+                        ggplot2::aes(PC, before_correction, colour ="dodgerblue3", group = 1))+
 
     ggplot2::geom_path(size=1.5, ggplot2::aes(PC, before_correction, group=1, colour ="dodgerblue3"))+
 
-    ggplot2::geom_point(ggplot2::aes(PC, after_correction, colour ="orange", group = 2),
-               show.legend = TRUE, size =3)+
+    ggplot2::geom_point(show.legend = TRUE, size =3,
+                        ggplot2::aes(PC, after_correction, colour ="orange", group = 2))+
 
-    ggplot2::geom_path(size=1.5, ggplot2::aes(PC, after_correction, group=2, colour ="orange" ))+
+    ggplot2::geom_path(size=1.5, ggplot2::aes(PC, after_correction, group=2, colour ="orange"))+
 
 
-    ggplot2::scale_colour_manual(values =c("dodgerblue3" = "dodgerblue3","orange" ="orange"),
+    ggplot2::scale_colour_manual(values =c("dodgerblue3" ,"orange"),
                         labels = c('Before Correction','After Correction'))+
 
     ggplot2::labs(x="Principal Components", y="Proportion of Variation",
@@ -58,6 +58,7 @@ pca_prop_var <- function(batch.title, plotFile, exprData1, exprData2){
     ggplot2::theme(
 
       #adjusting axis lines and text
+      axis.title = ggplot2::element_text(size = 15)
       axis.line.x = ggplot2::element_line(size =0.75),
       axis.line.y = ggplot2::element_line(size =0.75),
       axis.text.x = ggplot2::element_text(angle = 90, size=15, colour ="black"),
