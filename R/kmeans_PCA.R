@@ -46,20 +46,21 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
 
 
   silh <- as.data.frame(lapply(c(2:7),  function(x){
-  c(x, mean(cluster::silhouette(cluster_data[[x-1]]$cluster, distMatrix)[,3]))}),
-  col.names = c(2:7), row.names = c("k", "silWidth"))
+  c(x, mean(cluster::silhouette(cluster_data[[x-1]]$cluster, distMatrix)[,3]))})
+  colnames(sil.h)<- c(2:7)
+  row.names(sil.h) <- c("k", "silWidth")
 
   silh <- as.data.frame(t(silh))
 
   #writing avg sil width to file
   date <- as.character(format(Sys.Date(), "%Y%m%d"))
-  write.table(t(silh), file = paste0(date, "_", NameString, "_", when, "_avg_silhouette_width_k-means.txt"),
+  write.table(silh, file = paste0(date, "_", NameString, "_", when, "_avg_silhouette_width_k-means.txt"),
               sep = "\t")
 
 
   #finding the k with maximum avg. silhouette width
   max.sil <- silh[1+which(silh[2:dim(silh)[1],2]==max(silh[2:dim(silh)[1],2])),]
-  print(paste0("k=", max.sil[1], " has Average Silhouette Width = ", max.sil[2]))
+  print(paste0("k=", max.sil[1], " is optimal with Average Silhouette Width = ", max.sil[2]))
   opt.k <- as.numeric(max.sil[1])
 
   #writing the clustering information to file
@@ -158,7 +159,7 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
 
   dev.off()
 
-  return (k)
+  return (opt.k)
 }
 
 
