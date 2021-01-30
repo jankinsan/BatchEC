@@ -56,7 +56,6 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
   }
 
 
-
   #reading batch information
   print (paste0("Reading batch data from ", batchFile))
   if (length(grep(pattern = ".txt", batchFile)) ==1){
