@@ -103,9 +103,9 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
 
   #plotting silhouette plot and PCA plot with batches and kmeans information for opt.k
   if (NameString==""){
-    plotFile <- paste0(date, "_", batch, "_pca_with_kmeans_info_", when, ".pdf")
+    plotFile <- paste0(date, "_plot_", batch, "_pca_with_kmeans_info_", when, ".pdf")
   } else{
-    plotFile <- paste0(date, "_", NameString, "_", batch, "_pca_with_kmeans_info_", when, ".pdf")
+    plotFile <- paste0(date, "_plot_", NameString, "_", batch, "_pca_with_kmeans_info_", when, ".pdf")
   }
   print(paste0("Plotting Silhouette Plot and Principal Component Analysis biplot (with batches and clustering information) to the file ", plotFile))
   pdf (plotFile)
