@@ -23,18 +23,17 @@ contiguous, for example, used reads and useful reads in mClust. Default = TRUE}
 }
 \description{
 Evaluates if the batch effects with a gene expression dataset using linear
-regress and if the batch is associated with the data, the data is batch-corrected
+regression and if the batch is associated with the data, the data is batch-corrected
 using the ComBat Algorithm.
 
-Please set your working directory before you call the function.
-The directory should contain the input files.
+Please set your working directory before you call the function as all output files will be saved to this folder.
 }
 \examples{
 \dontrun{
-beacon(exprFile = "~/exprData.txt",
-               batchFile = "~/batchData.txt",
-               Batch = "Batch",
-               discrete.batch = TRUE)
+beacon(expr1 = dataset,
+       batch.info = batch_info,
+       batch = "Batch",
+       discrete.batch = TRUE)
 }
 
 

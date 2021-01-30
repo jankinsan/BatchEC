@@ -13,29 +13,29 @@ batch_eval_cor(
 )
 }
 \arguments{
-\item{exprFile}{File name of tab-delimited .txt file that contains the expression data. In the file, rows
-should be genes and columns should be samples.}
+\item{exprFile}{Path to .txt (tab-delimited) or a .csv file that contains the expression data. In the file, rows
+should be genes and columns should be sample IDs.}
 
-\item{batchFile}{Path to the tab-delimited .txt file that contains the batch information.
-The first column should be sample names.}
+\item{batchFile}{Path to the .txt (tab-delimited) or a .csv file that contains the batch information.
+The first column should be sample names/IDs}
 
 \item{batch}{The title of the batch for which you want to evaluate and do the
 correction. Default = "Batch"}
 
-\item{NameString}{String that will be added in all output filenames. Default=NA.}
+\item{NameString}{String that will be added in to all output filenames. Default="".}
 
-\item{discrete.batch}{Logical value indicating whether the samples are already
+\item{discrete.batch}{Logical value, indicating whether the samples are already
 grouped in discrete batches. If the value is FALSE, contiguous batch information is
-clustered into discrete batches. Useful for clustering batch variables that are
-contiguous, for example, used reads and useful reads in mClust. Default = TRUE}
+clustered into discrete batches using mClust. Useful for clustering batch variables that are
+contiguous. Default = TRUE}
 }
 \description{
 Evaluates if the batch effects with a gene expression dataset using linear
-regress and if the batch is associated with the data, the data is batch-corrected
+regression and if the batch is associated with the data, the data is batch-corrected
 using the ComBat Algorithm.
 
-Please set your working directory before you call the function.
-The directory should contain the input files.
+Please set your working directory before you call the function as all output files will be saved to this folder.
+Ensure that you add the correct input file paths.
 }
 \examples{
 \dontrun{
