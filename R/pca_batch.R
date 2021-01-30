@@ -60,14 +60,14 @@ pca_batch <- function(exprData, batch.info, batch, NameString = "", when = ""){
 
     ggplot2::theme(
 
-      #adjusting axis titles, lines and text
+      #Adjusting axis titles, lines and text
       axis.title = ggplot2::element_text(size = 15),
       axis.line = ggplot2::element_line(size =0.75),
       axis.text = ggplot2::element_text(size=15, colour ="black"),
       #Center align the title
       plot.title = ggplot2::element_text(face = "bold", hjust =0.5, size =20),
 
-      #remove legend title
+      #Adjust legend title and text
       legend.title = ggplot2::element_text(size = 15, face = "bold"),
       legend.text = ggplot2::element_text(size = 15),
 
@@ -80,6 +80,7 @@ pca_batch <- function(exprData, batch.info, batch, NameString = "", when = ""){
 
       # Remove panel background
       panel.background = ggplot2::element_blank())+
+  
     ggplot2::scale_fill_manual(values=c("#000000", "#E69F00", "#56B4E9", "#009E73",
                                         "#F0E442", "#0072B2", "#D55E00", "#CC79A7"))
 
