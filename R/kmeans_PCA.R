@@ -151,8 +151,8 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
       # Remove panel background
       panel.background = ggplot2::element_blank()
     ) +
-    scale_fill_manual(values=c("#000000", "#E69F00", "#56B4E9", "#009E73",
-                               "#F0E442", "#0072B2", "#D55E00", "#CC79A7"))
+    ggplot2::scale_fill_manual(values=c("#000000", "#E69F00", "#56B4E9", "#009E73",
+                                        "#F0E442", "#0072B2", "#D55E00", "#CC79A7"))
 
   plot(kmeans_pca_plot)
 
