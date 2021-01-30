@@ -58,7 +58,7 @@ pca_prop_var <- function(batch.title, plotFile, exprData1, exprData2){
     ggplot2::theme(
 
       #adjusting axis lines and text
-      axis.title = ggplot2::element_text(size = 15)
+      axis.title = ggplot2::element_text(size = 15),
       axis.line.x = ggplot2::element_line(size =0.75),
       axis.line.y = ggplot2::element_line(size =0.75),
       axis.text.x = ggplot2::element_text(angle = 90, size=15, colour ="black"),
