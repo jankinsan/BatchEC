@@ -46,7 +46,7 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
 
 
   silh <- as.data.frame(lapply(c(2:7),  function(x){
-  c(x, mean(cluster::silhouette(cluster_data[[x-1]]$cluster, distMatrix)[,3]))})
+  c(x, mean(cluster::silhouette(cluster_data[[x-1]]$cluster, distMatrix)[,3]))}))
   colnames(sil.h)<- c(2:7)
   row.names(sil.h) <- c("k", "silWidth")
 
