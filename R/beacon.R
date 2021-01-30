@@ -113,12 +113,7 @@ beacon <- function(expr1, batch.info, batch, NameString = "", discrete.batch = T
                         batch = batch,
                         NameString = NameString,
                         when = "after_correction")
-
-  #ensuring biological variability is not removed by checking k before and after correction
-  if (k_before != k_after){
-    stop("Optimal number of clusters differ before and after correction, biological variability may have been removed by ComBat")
-  }
-
+    
   #PCA Proportion of Variation
   pca_prop_var(batch.title = batch,
                plotFile = ifelse(NameString == "",
