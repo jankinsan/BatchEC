@@ -1,6 +1,6 @@
 Package: BatchEC
 Title: Evaluates and corrects batch effects in gene expression data
-Version: 0.0.1.0000
+Version: 0.0.2.0000
 Authors@R: c(person("Janki", "Insan", role = c("aut", "cre"),
                     email = "jankinsan@gmail.com"),
             person("Hari", "PS", email = "hari.ps@icr.ac.uk",
