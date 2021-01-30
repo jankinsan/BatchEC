@@ -20,13 +20,10 @@ boxplot_data <- function(expr, when, NameString, batch = "Batch"){
   #plotting gene expression
   data <- reshape2::melt(expr)
 
-  if(when == "before"){
+  #boxplot expression
   boxplot_expression <- ggplot2::ggplot(data, ggplot2::aes(x=variable,
-                                                          y= value)) +
-    ggplot2::geom_boxplot(color = "blue4",
-                          inherit.aes = TRUE,
-                          outlier.size = 0.5,
-                          outlier.color = "limegreen")+
+                                                           y= value)) +
+
     ggplot2::scale_x_discrete(guide = ggplot2::guide_axis(check.overlap = TRUE))+
 
     ggplot2::labs(title = paste0("Gene Expression ", when, " Correction for ", batch),
@@ -35,13 +32,13 @@ boxplot_data <- function(expr, when, NameString, batch = "Batch"){
 
     ggplot2::theme(
       #adjusting axis lines and text
-      axis.line.x = ggplot2::element_line(size =0.5),
-      axis.line.y = ggplot2::element_line(size =0.5),
-      axis.text.x = ggplot2::element_text(size =10, colour ="black"),
-      axis.text.y = ggplot2::element_text(size=10, colour ="black"),
+      axis.line.x = ggplot2::element_line(size =0.75),
+      axis.line.y = ggplot2::element_line(size =0.75),
+      axis.text.x = ggplot2::element_text(size =15, colour ="black"),
+      axis.text.y = ggplot2::element_text(size=15, colour ="black"),
 
       #Center align the title
-      plot.title = ggplot2::element_text(face = "bold", hjust =0.5),
+      plot.title = ggplot2::element_text(face = "bold", hjust =0.5, size = 20),
 
       # Remove panel grid lines
       panel.grid.major = ggplot2::element_blank(),
@@ -49,36 +46,20 @@ boxplot_data <- function(expr, when, NameString, batch = "Batch"){
 
       # Remove panel background
       panel.background = ggplot2::element_blank())
-  }
-  else if (when == "after"){
-    boxplot_expression <- ggplot2::ggplot(data, ggplot2::aes(x =variable,
-                                                              y =value)) +
-      ggplot2::geom_boxplot(color = "red",
+
+  if(when == "before"){
+    boxplot_exp <- boxplot_expression +
+      ggplot2::geom_boxplot(color = "dodgerblue3",
                             inherit.aes = TRUE,
                             outlier.size = 0.5,
-                            outlier.color = "limegreen")+
-      ggplot2::scale_x_discrete(guide = ggplot2::guide_axis(check.overlap = TRUE))+
-
-      ggplot2::labs(title = paste0("Gene Expression ", when, " after Batch Correction"),
-                    x = "Samples",
-                    y = "Expression") +
-
-      ggplot2::theme(
-        #adjusting axis lines and text
-        axis.line.x = ggplot2::element_line(size =0.5),
-        axis.line.y = ggplot2::element_line(size =0.5),
-        axis.text.x = ggplot2::element_text(size =10, colour ="black"),
-        axis.text.y = ggplot2::element_text(size=10, colour ="black"),
-
-        #Center align the title
-        plot.title = ggplot2::element_text(face = "bold", hjust =0.5),
-
-        # Remove panel grid lines
-        panel.grid.major = ggplot2::element_blank(),
-        panel.grid.minor = ggplot2::element_blank(),
-
-        # Remove panel background
-        panel.background = ggplot2::element_blank())
+                            outlier.color = "limegreen")
+  }
+  else if (when == "after"){
+    boxplot_exp <- boxplot_expression +
+      ggplot2::geom_boxplot(color = "orange",
+                            inherit.aes = TRUE,
+                            outlier.size = 0.5,
+                            outlier.color = "limegreen")
   } else{
     stop("Please specify the string 'when', should be either 'before' or 'after'")
   }
@@ -92,7 +73,7 @@ boxplot_data <- function(expr, when, NameString, batch = "Batch"){
 
   #plotting both the boxplots in a pdf file
   pdf(plotFile, height= 6.5, width = 13)
-  plot (boxplot_expression)
+  plot (boxplot_exp)
   dev.off()
   print(paste0("Boxplot ", when, " Batch Correction plotted to ", plotFile))
 }

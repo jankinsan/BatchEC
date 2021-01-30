@@ -2,11 +2,11 @@
 #'
 #'
 #' @description Evaluates if the batch effects with a gene expression dataset using linear
-#' regress and if the batch is associated with the data, the data is batch-corrected
+#' regression and if the batch is associated with the data, the data is batch-corrected
 #' using the ComBat Algorithm.
 #'
-#' Please set your working directory before you call the function.
-#' The directory should contain the input files.
+#' Please set your working directory before you call the function as all output files will be saved to this folder.
+#' Ensure that you add the correct input file paths.
 #'
 #'
 #' @param exprFile Path to .txt (tab-delimited) or a .csv file that contains the expression data. In the file, rows

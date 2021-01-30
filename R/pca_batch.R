@@ -49,7 +49,9 @@ pca_batch <- function(exprData, batch.info, batch, NameString = "", when = ""){
   pdf (plotFile)
   pca_plot <- ggplot2::ggplot(data = pca_data) +
 
-    ggplot2::geom_point(size =6, alpha= 0.6, ggplot2::aes(x=PC1, y=PC2, colour =Batch))+
+    ggplot2::geom_point(size =6,
+                        alpha= 0.6,
+                        ggplot2::aes(x=PC1, y=PC2, colour =Batch))+
 
     ggplot2::labs(title=paste("PCA with", batch, "information", sep = " "),
                   x = "PC1",
@@ -58,18 +60,16 @@ pca_batch <- function(exprData, batch.info, batch, NameString = "", when = ""){
 
     ggplot2::theme(
 
-      #adjusting axis lines and text
-      axis.line.x = ggplot2::element_line(size =0.75),
-      axis.line.y = ggplot2::element_line(size =0.75),
-      axis.text.x = ggplot2::element_text(angle = 90, size=15, colour ="black"),
-      axis.text.y = ggplot2::element_text(size=15, colour ="black"),
-
+      #adjusting axis titles, lines and text
+      axis.title = ggplot2::element_text(size = 15),
+      axis.line = ggplot2::element_line(size =0.75),
+      axis.text = ggplot2::element_text(size=15, colour ="black"),
       #Center align the title
-      plot.title = ggplot2::element_text(face = "bold", hjust =0.5, size =30),
+      plot.title = ggplot2::element_text(face = "bold", hjust =0.5, size =20),
 
       #remove legend title
-      legend.title = ggplot2::element_blank(),
-      legend.text = ggplot2::element_text(size = 10),
+      legend.title = ggplot2::element_text(size = 15, face = "bold"),
+      legend.text = ggplot2::element_text(size = 15),
 
       # Adjust panel border
       panel.border = ggplot2::element_blank(),
@@ -79,10 +79,9 @@ pca_batch <- function(exprData, batch.info, batch, NameString = "", when = ""){
       panel.grid.minor = ggplot2::element_blank(),
 
       # Remove panel background
-      panel.background = ggplot2::element_blank()
-
-
-  )
+      panel.background = ggplot2::element_blank())+
+    scale_fill_manual(values=c("#000000", "#E69F00", "#56B4E9", "#009E73",
+                               "#F0E442", "#0072B2", "#D55E00", "#CC79A7"))
 
   plot(pca_plot)
   dev.off()

@@ -2,11 +2,11 @@
 #'
 #'
 #' @description Evaluates if the batch effects with a gene expression dataset using linear
-#' regress and if the batch is associated with the data, the data is batch-corrected
+#' regression and if the batch is associated with the data, the data is batch-corrected
 #' using the ComBat Algorithm.
 #'
-#' Please set your working directory before you call the function.
-#' The directory should contain the input files.
+#' Please set your working directory before you call the function as all output files will be saved to this folder.
+#'
 #'
 #'
 #' @param expr1 gene expression data; rows should be genes and columns should be samples.
@@ -54,13 +54,12 @@ beacon <- function(expr1, batch.info, batch, NameString = "", discrete.batch = T
 
   #removing genes with zero variance
   std_genes <- apply(expr1, MARGIN =1, sd)
-  genes <- names(which (std_genes > 0))
   genes_sd_0 <- length(which (std_genes ==0))
   remgenes <- length (std_genes) - genes_sd_0
-  matObj <- match(genes, row.names(expr1))
-  expr1 <- expr1[matObj,]
+  expr1 <- expr1[which (std_genes > 0),]
   print(paste0("Removed ", genes_sd_0, " genes with zero variance..."))
   print (paste0(remgenes, " genes remain..."))
+
 
   exprData1 <- t(expr1)
 
