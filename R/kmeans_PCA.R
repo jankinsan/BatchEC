@@ -54,7 +54,9 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
 
   #writing avg sil width to file
   date <- as.character(format(Sys.Date(), "%Y%m%d"))
-  write.table(silh, file = paste0(date, "_", NameString, "_", when, "_avg_silhouette_width_k-means.txt"),
+  write.table(silh, file = file= ifelse(NameString == "",
+                           paste0(dir, "/", "kmeans_", when, "/", date, "_", batch, "_", when,  "_avg_silhouette_width_k-means.txt"),
+                           paste0(dir, "/", "kmeans_", when, "/", date, "_", batch, "_", NameString, "_", when,  "_avg_silhouette_width_k-means.txt")),
               sep = "\t")
 
 
