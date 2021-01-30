@@ -71,7 +71,7 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
               file= ifelse(NameString == "",
                            paste0(dir, "/", "kmeans_", when, "/", date, "_", when,  "_k-means_cluster_info.txt"),
                            paste0(dir, "/", "kmeans_", when, "/", date, "_", NameString, "_", when,  "_k-means_cluster_info.txt")),
-              sep = "\t")
+              sep = "\t", row.names = FALSE)
 
   #Calculating Principal Components
   print("Calculating Principal Components...")
