@@ -34,19 +34,19 @@ correlationPlot<- function(exprData1, exprData2, fileName="", batch){
 
   date <- as.character(format(Sys.Date(), "%Y%m%d"))
   if  (fileName ==""){
-    plotFile <- paste0(date, "_plot_", batch,"_correlationPlot.pdf")
+    plotFile <- paste0(date, "_plot_", batch,"_correlationPlot.jpeg")
   } else{
-    plotFile <- paste0(date, "_plot_", fileName, "_", batch,"_correlationPlot.pdf")
+    plotFile <- paste0(date, "_plot_", fileName, "_", batch,"_correlationPlot.jpeg")
   }
-  print(paste0("Correlation scatter plot saved to: ", plotFile))
-  pdf (plotFile)
+  print(paste0("Correlation scatter plot is being saved to: ", plotFile))
+  #pdf (plotFile)
 
   plot1 <- ggplot2::ggplot(x, ggplot2::aes(x=before_correction, y=after_correction))+
-    ggplot2::geom_point() +
+    ggplot2::geom_point(color = "darkorange") + ggplot2::geom_smooth(method = "lm", colour = "purple") +
     ggplot2::labs(x = "Gene Expression before Correction",
-         y = "Gene Expression after Correction",
-         title = "Scatterplot showing Correlation between data before and after batch correction",
-         subtitle = paste("Pearson Correlation coefficient", "=", corr_coef, sep= " "))+
+                  y = "Gene Expression after Correction",
+                  title = "Scatterplot showing Correlation between data before and after batch correction",
+                  subtitle = paste("Pearson Correlation coefficient", "=", corr_coef, sep= " "))+
     ggplot2::theme(
 
       #adjusting axis lines and text
@@ -73,8 +73,16 @@ correlationPlot<- function(exprData1, exprData2, fileName="", batch){
 
     )
 
+  #saving plot
+  ggsave(plotFile,
+    plot = plot1,
+    device = "jpeg",
+    scale = 1,
+    dpi = 300,
+    limitsize = TRUE
+  )
 
-  plot(plot1)
-  dev.off()
+  #plot(plot1)
+  #dev.off()
 
 }
