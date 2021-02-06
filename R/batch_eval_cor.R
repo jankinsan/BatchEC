@@ -127,7 +127,7 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
                           when = "before_correction")
 
     #Batch Correction using ComBat
-    expr2 <- ComBat_data (exprData = expr1,
+    expr2 <- ComBat_data (expr = expr1,
                          batch.info= batch.info,
                          batch = batch,
                          NameString = NameString)
