@@ -74,7 +74,7 @@ correlationPlot<- function(exprData1, exprData2, fileName="", batch){
     )
 
   #saving plot
-  ggsave(plotFile,
+  ggplot2::ggsave(plotFile,
     plot = plot1,
     device = "jpeg",
     scale = 1,
