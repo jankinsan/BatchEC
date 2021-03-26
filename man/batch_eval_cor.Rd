@@ -2,14 +2,16 @@
 % Please edit documentation in R/batch_eval_cor.R
 \name{batch_eval_cor}
 \alias{batch_eval_cor}
-\title{Batch Evaluation and Correction}
+\title{Batch Effects Evaluation and Correction}
 \usage{
 batch_eval_cor(
   exprFile,
   batchFile,
   batch,
   NameString = "",
-  discrete.batch = TRUE
+  discrete.batch = TRUE,
+  clus.method = "both",
+  nrun.NMF = 30
 )
 }
 \arguments{
@@ -28,6 +30,11 @@ correction. Default = "Batch"}
 grouped in discrete batches. If the value is FALSE, contiguous batch information is
 clustered into discrete batches using mClust. Useful for clustering batch variables that are
 contiguous. Default = TRUE}
+
+\item{clus.method}{Method to be used for clustering. "km" denotes k-means, "NMF"
+denotes NMF with 30 runs. Default means clustering is done using both the methods.}
+
+\item{nrun.NMF}{number of runs for NMF. Default = 30.}
 }
 \description{
 Evaluates if the batch effects with a gene expression dataset using linear

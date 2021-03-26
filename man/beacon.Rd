@@ -2,9 +2,17 @@
 % Please edit documentation in R/beacon.R
 \name{beacon}
 \alias{beacon}
-\title{Batch Evaluation and Correction}
+\title{Batch Effects Evaluation and Correction}
 \usage{
-beacon(expr1, batch.info, batch, NameString = "", discrete.batch = TRUE)
+beacon(
+  expr1,
+  batch.info,
+  batch,
+  NameString = "",
+  discrete.batch = TRUE,
+  clus.method = "both",
+  nrun.NMF = 30
+)
 }
 \arguments{
 \item{expr1}{gene expression data; rows should be genes and columns should be samples.}
@@ -20,6 +28,11 @@ correction. Default = "Batch"}
 grouped in discrete batches. If the value is FALSE, contiguous batch information is
 clustered into discrete batches. Useful for clustering batch variables that are
 contiguous, for example, used reads and useful reads in mClust. Default = TRUE}
+
+\item{clus.method}{Method to be used for clustering. "km" denotes k-means, "NMF"
+denotes NMF with 30 runs. Default means clustering is done using both the methods.}
+
+\item{nrun.NMF}{number of runs for NMF. Default = 30.}
 }
 \description{
 Evaluates if the batch effects with a gene expression dataset using linear

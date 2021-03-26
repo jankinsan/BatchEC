@@ -2,7 +2,7 @@
 % Please edit documentation in R/pca_batch.R
 \name{pca_batch}
 \alias{pca_batch}
-\title{PCA Plot}
+\title{PCA Plot with batch information}
 \usage{
 pca_batch(exprData, batch.info, batch, NameString = "", when = "")
 }

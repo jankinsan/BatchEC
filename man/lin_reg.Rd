@@ -4,7 +4,7 @@
 \alias{lin_reg}
 \title{Linear Regression of Principal Components}
 \usage{
-lin_reg(exprData, batch.info, batch = "Batch")
+lin_reg(exprData, batch.info, batch = "Batch", NameString = "", when = "")
 }
 \arguments{
 \item{exprData}{A matrix containing gene expression data. Row names should be samples and column names should be genes.}
@@ -12,9 +12,12 @@ lin_reg(exprData, batch.info, batch = "Batch")
 \item{batch.info}{A data frame containing the samples names and details of the batch they belong to.}
 
 \item{batch}{Title of the batch the data is being corrected for.}
+
+\item{when}{String indicating when the linear regression analysis is taking place
+(before batch correction or after batch correction?). Values should be either "before" or "after".}
 }
 \value{
-Returns the p-value associated with PC1 and PC2 after linear regression analysis
+Returns the p-value associated with first ten principal components after linear regression analysis
 }
 \description{
 Calculates Linear Regression of Principal Components 1 and 2 of the data

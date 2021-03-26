@@ -4,14 +4,14 @@
 \alias{correlationPlot}
 \title{Correlation Scatter Plot}
 \usage{
-correlationPlot(exprData1, exprData2, fileName = "", batch)
+correlationPlot(exprData1, exprData2, NameString = "", batch)
 }
 \arguments{
 \item{exprData1}{A matrix containing the gene expression data before batch correction}
 
 \item{exprData2}{A matrix containing the gene expression data after batch correction}
 
-\item{fileName}{String to be added to the name of the file to which correlation
+\item{NameString}{String to be added to the name of the file to which correlation
 scatter plot would be saved}
 
 \item{batch}{The tile of the batch}
