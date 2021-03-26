@@ -46,7 +46,7 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
 
 
   silh <- as.data.frame(lapply(c(2:7),  function(x){
-  c(x, mean(cluster::silhouette(cluster_data[[x-1]]$cluster, distMatrix)[,3]))}))
+    c(x, mean(cluster::silhouette(cluster_data[[x-1]]$cluster, distMatrix)[,3]))}))
   colnames(silh)<- c(2:7)
   row.names(silh) <- c("k", "silWidth")
 
@@ -55,8 +55,8 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
   #writing avg sil width to file
   date <- as.character(format(Sys.Date(), "%Y%m%d"))
   write.table(silh, file = ifelse(NameString == "",
-                           paste0(dir, "/", "kmeans_", when, "/", date, "_", batch, "_", when,  "_avg_silhouette_width_k-means.txt"),
-                           paste0(dir, "/", "kmeans_", when, "/", date, "_", batch, "_", NameString, "_", when,  "_avg_silhouette_width_k-means.txt")),
+                                  paste0(dir, "/", "kmeans_", when, "/", date, "_", batch, "_", when,  "_avg_silhouette_width_k-means.txt"),
+                                  paste0(dir, "/", "kmeans_", when, "/", date, "_", batch, "_", NameString, "_", when,  "_avg_silhouette_width_k-means.txt")),
               sep = "\t")
 
 
@@ -128,9 +128,9 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
   kmeans_pca_plot <- ggplot2::ggplot(data = pca_data) +
 
     ggplot2::geom_point(ggplot2::aes(x=PC1,
-                   y=PC2,
-                   colour =Batch,
-                   shape =kmeans_cluster), size=6, alpha = 0.6)+
+                                     y=PC2,
+                                     colour =Batch,
+                                     shape =kmeans_cluster), size=6, alpha = 0.6)+
     ggplot2::labs(title= paste0("PCA plot for ", batch, "; k = ", opt.k),
                   colour = "Batch",
                   shape = "k-means Cluster")+
@@ -143,13 +143,13 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
 
       #Center align the title
       plot.title = ggplot2::element_text(face = "bold", hjust =0.5, size =20),
-      
+
       #Adjust legend title and text
       legend.title = ggplot2::element_text(size = 15, face = "bold"),
       legend.text = ggplot2::element_text(size = 15),
 
       # Remove panel border
-      panel.border = ggplot2::element_blank(),
+      panel.border = ggplot2::element_rect(fill=NA, size= 0.75),
 
       # Remove panel grid lines
       panel.grid.major = ggplot2::element_blank(),
@@ -157,9 +157,10 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
 
       # Remove panel background
       panel.background = ggplot2::element_blank()) +
-  
-    ggplot2::scale_fill_manual(values=c("#000000", "#E69F00", "#56B4E9", "#009E73",
-                                        "#F0E442", "#0072B2", "#D55E00", "#CC79A7"))
+
+    ggplot2::scale_color_manual(values=c("#fcba03",  "#19e01c", "#ff470f",
+                                         "#0fdbca", "#ff217e","#405ce6",
+                                         "#6b6769","#b264ed"))
 
   plot(kmeans_pca_plot)
 
@@ -167,5 +168,3 @@ kmeans_PCA <- function(exprData, batch.info, batch= "Batch", NameString = "", wh
 
   return (opt.k)
 }
-
-

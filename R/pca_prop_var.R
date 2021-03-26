@@ -50,10 +50,10 @@ pca_prop_var <- function(batch.title, plotFile, exprData1, exprData2){
 
 
     ggplot2::scale_colour_manual(values =c("dodgerblue3" ,"orange"),
-                        labels = c('Before Correction','After Correction'))+
+                                 labels = c('Before Correction','After Correction'))+
 
     ggplot2::labs(x="Principal Components", y="Proportion of Variation",
-         title = paste0("Proportion of Variation for ",batch.title))+
+                  title = paste0("Proportion of Variation for ",batch.title))+
 
     ggplot2::theme(
 
@@ -89,5 +89,3 @@ pca_prop_var <- function(batch.title, plotFile, exprData1, exprData2){
   dev.off()
 
 }
-
-

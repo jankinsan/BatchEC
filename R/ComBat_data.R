@@ -45,7 +45,7 @@ ComBat_data <- function(expr, batch.info, batch = "Batch", NameString = "")
   if(NameString==""){
     outfile  <- outFile <- paste0(date, "_data_", "batch_corrected_", batch, ".txt")
   } else {
-  outFile <- paste0(date, "_data_", NameString, "_batch_corrected_", batch, ".txt")
+    outFile <- paste0(date, "_data_", NameString, "_batch_corrected_", batch, ".txt")
   }
 
   write.table(batch_corrected, outFile, quote=FALSE, sep="\t")

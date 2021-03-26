@@ -6,14 +6,14 @@
 #'
 #' @param exprData1 A matrix containing the gene expression data before batch correction
 #' @param exprData2 A matrix containing the gene expression data after batch correction
-#' @param fileName String to be added to the name of the file to which correlation
+#' @param NameString String to be added to the name of the file to which correlation
 #'  scatter plot would be saved
 #' @param batch The tile of the batch
 #'
 #' @import grDevices
 #'
 #' @export
-correlationPlot<- function(exprData1, exprData2, fileName="", batch){
+correlationPlot<- function(exprData1, exprData2, NameString="", batch){
 
   print("===========================Plotting scatter plot to show correlation=====================")
 
@@ -33,13 +33,12 @@ correlationPlot<- function(exprData1, exprData2, fileName="", batch){
   x = cbind.data.frame(before_correction, after_correction)
 
   date <- as.character(format(Sys.Date(), "%Y%m%d"))
-  if  (fileName ==""){
+  if  (NameString ==""){
     plotFile <- paste0(date, "_plot_", batch,"_correlationPlot.jpeg")
   } else{
-    plotFile <- paste0(date, "_plot_", fileName, "_", batch,"_correlationPlot.jpeg")
+    plotFile <- paste0(date, "_plot_", NameString, "_", batch,"_correlationPlot.jpeg")
   }
-  print(paste0("Correlation scatter plot is being saved to: ", plotFile))
-  #pdf (plotFile)
+  print(paste0("Correlation scatter plot will be saved to: ", plotFile))
 
   plot1 <- ggplot2::ggplot(x, ggplot2::aes(x=before_correction, y=after_correction))+
     ggplot2::geom_point(color = "darkorange") + ggplot2::geom_smooth(method = "lm", colour = "purple") +
@@ -81,8 +80,5 @@ correlationPlot<- function(exprData1, exprData2, fileName="", batch){
     dpi = 300,
     limitsize = TRUE
   )
-
-  #plot(plot1)
-  #dev.off()
 
 }

@@ -1,4 +1,4 @@
-#' @title PCA Plot
+#' @title PCA Plot with batch information
 #'
 #' @description Plots the first two principal components for all the samples of
 #'  a gene expression dataset along with the batch information
@@ -33,10 +33,10 @@ pca_batch <- function(exprData, batch.info, batch, NameString = "", when = ""){
 
   #calculating the principal components and adding the data to pca_data
   print("Calculating Principal Components...")
-  pca1 <- prcomp(exprData, center = TRUE, scale. = TRUE)
+  pca.dat <- prcomp(exprData, center = TRUE, scale. = TRUE)
 
 
-  pca_data <- cbind.data.frame(pca1$x[, 1:2], batch.info[s,2])
+  pca_data <- cbind.data.frame(pca.dat$x[, 1:2], batch.info[s,2])
   colnames(pca_data)[3] <- "Batch"
   pca_data[,3] <- as.factor(pca_data[,3])
 
@@ -44,14 +44,14 @@ pca_batch <- function(exprData, batch.info, batch, NameString = "", when = ""){
   #plot PCA
   date <- as.character(format(Sys.Date(), "%Y%m%d"))
   plotFile <- ifelse (NameString =="",
-                     paste0(date, "_plot_", batch, "_pca_", when, ".pdf"),
-                     paste0(date, "_plot_", NameString, "_", batch, "_pca_", when, ".pdf"))
+                      paste0(date, "_plot_", batch, "_pca_", when, ".pdf"),
+                      paste0(date, "_plot_", NameString, "_", batch, "_pca_", when, ".pdf"))
   pdf (plotFile)
   pca_plot <- ggplot2::ggplot(data = pca_data) +
 
     ggplot2::geom_point(size =6,
                         alpha= 0.6,
-                        ggplot2::aes(x=PC1, y=PC2, colour =Batch))+
+                        ggplot2::aes(x=PC1, y=PC2, colour=Batch))+
 
     ggplot2::labs(title=paste("PCA with", batch, "information", sep = " "),
                   x = "PC1",
@@ -62,7 +62,7 @@ pca_batch <- function(exprData, batch.info, batch, NameString = "", when = ""){
 
       #Adjusting axis titles, lines and text
       axis.title = ggplot2::element_text(size = 15),
-      axis.line = ggplot2::element_line(size =0.75),
+      axis.line = ggplot2::element_line(size=0.75),
       axis.text = ggplot2::element_text(size=15, colour ="black"),
       #Center align the title
       plot.title = ggplot2::element_text(face = "bold", hjust =0.5, size =20),
@@ -72,7 +72,7 @@ pca_batch <- function(exprData, batch.info, batch, NameString = "", when = ""){
       legend.text = ggplot2::element_text(size = 15),
 
       # Adjust panel border
-      panel.border = ggplot2::element_blank(),
+      panel.border = ggplot2::element_rect(fill=NA, size= 0.75),
 
       # Remove panel grid lines
       panel.grid.major = ggplot2::element_blank(),
@@ -80,9 +80,10 @@ pca_batch <- function(exprData, batch.info, batch, NameString = "", when = ""){
 
       # Remove panel background
       panel.background = ggplot2::element_blank())+
-  
-    ggplot2::scale_fill_manual(values=c("#000000", "#E69F00", "#56B4E9", "#009E73",
-                                        "#F0E442", "#0072B2", "#D55E00", "#CC79A7"))
+
+     ggplot2::scale_colour_manual(values=c("#fcba03",  "#19e01c", "#ff470f",
+                                           "#0fdbca", "#ff217e","#405ce6",
+                                           "#6b6769","#b264ed"))
 
   plot(pca_plot)
   dev.off()
@@ -90,4 +91,3 @@ pca_batch <- function(exprData, batch.info, batch, NameString = "", when = ""){
   print(paste0("Plotted PC1 & PC2 with batch to ", plotFile))
 
 }
-

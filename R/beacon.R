@@ -1,4 +1,4 @@
-#' @title Batch Evaluation and Correction
+#' @title Batch Effects Evaluation and Correction
 #'
 #'
 #' @description Evaluates if the batch effects with a gene expression dataset using linear
@@ -18,6 +18,9 @@
 #' grouped in discrete batches. If the value is FALSE, contiguous batch information is
 #' clustered into discrete batches. Useful for clustering batch variables that are
 #' contiguous, for example, used reads and useful reads in mClust. Default = TRUE
+#' @param clus.method Method to be used for clustering. "km" denotes k-means, "NMF"
+#' denotes NMF with 30 runs. Default means clustering is done using both the methods.
+#' @param nrun.NMF number of runs for NMF. Default = 30.
 #'
 #' @import utils
 #' @import mclust
@@ -32,7 +35,7 @@
 #'
 #'
 #' @export
-beacon <- function(expr1, batch.info, batch, NameString = "", discrete.batch = TRUE){
+beacon <- function(expr1, batch.info, batch, NameString = "", discrete.batch = TRUE, clus.method = "both", nrun.NMF = 30){
 
   #matching batch
   mat <- match(batch, colnames(batch.info))
@@ -51,6 +54,8 @@ beacon <- function(expr1, batch.info, batch, NameString = "", discrete.batch = T
                 col.names = TRUE,
                 row.names = FALSE)
   }
+  batch.info[,2]<- as.factor(batch.info[,2])
+
 
   #removing genes with zero variance
   std_genes <- apply(expr1, MARGIN =1, sd)
@@ -66,79 +71,118 @@ beacon <- function(expr1, batch.info, batch, NameString = "", discrete.batch = T
   #linear regression before batch correction
   p_val_before <- lin_reg(exprData=exprData1,
                           batch.info = batch.info,
-                          batch=batch)
+                          batch=batch,
+                          NameString = NameString,
+                          when = "before")
 
   #checking if any of the p values are less than 0.05
-  if(p_val_before[1] >0.05 && p_val_before[2] >0.05){
+  if(all(p_val_before[,2]>0.05)){
     stop("Halting execution since the batch specified is not associated with data...")
 
   }else{
 
     print("Batch is associated with the data...")
 
-  #pca with batch before correction
-  pca_batch (exprData = exprData1,
-             batch.info= batch.info,
-             batch= batch,
-             NameString = NameString,
-             when = "before_ComBat_correction")
+    #pca with batch before correction
+    pca_batch (exprData = exprData1,
+               batch.info= batch.info,
+               batch= batch,
+               NameString = NameString,
+               when = "before_ComBat_correction")
 
-  #pca with batch and kmeans before batch correction
-  k_before <- kmeans_PCA(exprData = exprData1,
-                         batch.info = batch.info,
-                         batch = batch,
-                         NameString = NameString,
-                         when = "before_correction")
+    #clustering method
+    if(clus.method=="both"){
+      km = TRUE; NMF = TRUE;
+    } else if(clus.method=="km"){
+      km = TRUE; NMF = FALSE;
+    } else if(clus.method=="NMF"){
+      km = FALSE; NMF = TRUE;
+    }
 
-  #Batch Correction using ComBat
-  expr2 <- ComBat_data (expr = expr1,
-                        batch.info= batch.info,
-                        batch = batch,
-                        NameString = NameString)
-  exprData2 <- t(expr2)
+    if(km==TRUE){
+    #pca with batch and kmeans before batch correction
+      k_before <- kmeans_PCA(exprData = exprData1,
+                             batch.info = batch.info,
+                             batch = batch,
+                             NameString = NameString,
+                             when = "before_correction")
+    }
+    if(NMF==TRUE){
+      #NMF with PCA before correction
+      NMF_PCA(expr=expr1,
+              batch.info = batch.info,
+              nrun = nrun.NMF,
+              batch = batch,
+              NameString = NameString,
+              when = "before_correction")
+    }
 
-  #linear regression after batch correction
-  p_val_after <- lin_reg(exprData=exprData2, batch.info = batch.info, batch=batch)
+    #Batch Correction using ComBat
+    expr2 <- ComBat_data (expr = expr1,
+                          batch.info= batch.info,
+                          batch = batch,
+                          NameString = NameString)
+    exprData2 <- t(expr2)
 
-  #pca with batch after correction
-  pca_batch (exprData = exprData2,
-             batch.info= batch.info,
-             batch= batch,
-             NameString = NameString,
-             when = "after_ComBat_correction")
+    #linear regression after batch correction
+    p_val_after <- lin_reg(exprData=exprData2,
+                           batch.info = batch.info,
+                           batch=batch,
+                           NameString = NameString,
+                           when = "after")
 
-  #pca with batch and k-means after correction
-  k_after <- kmeans_PCA(exprData = exprData2,
-                        batch.info = batch.info,
-                        batch = batch,
-                        NameString = NameString,
-                        when = "after_correction")
-    
-  #PCA Proportion of Variation
-  pca_prop_var(batch.title = batch,
-               plotFile = ifelse(NameString == "",
-                                 paste0("plot_pca_prop_var_", batch, ".pdf"),
-                                 paste0(NameString, "_plot_pca_prop_var_", batch, ".pdf")),
-               exprData1 = exprData1,
-               exprData2 = exprData2)
+    #pca with batch after correction
+    pca_batch (exprData = exprData2,
+               batch.info= batch.info,
+               batch= batch,
+               NameString = NameString,
+               when = "after_ComBat_correction")
 
-  #pearson correlation scatter plot
-  correlationPlot(exprData1 = exprData1,
-                  exprData2 = exprData2,
-                  batch = batch,
-                  fileName = NameString)
+    if(km==TRUE){
+    #pca with batch and k-means after correction
+    k_after <- kmeans_PCA(exprData = exprData2,
+                          batch.info = batch.info,
+                          batch = batch,
+                          NameString = NameString,
+                          when = "after_correction")
+    }
+    if(NMF==TRUE){
+      #NMF with PCA after correction
+      NMF_PCA(expr=expr2,
+              batch.info = batch.info,
+              nrun = nrun.NMF,
+              batch = batch,
+              NameString = NameString,
+              when = "after_correction")
+    }
 
-  #boxplots before and after batch correction
-  boxplot_data (expr = expr1,
-                when = "before",
-                NameString = NameString,
-                batch = batch)
-  boxplot_data (expr = as.data.frame(expr2),
-                when = "after",
-                NameString = NameString,
-                batch = batch)
+    #PCA Proportion of Variation
+    pca_prop_var(batch.title = batch,
+                 plotFile = ifelse(NameString == "",
+                                   paste0("plot_pca_prop_var_", batch, ".pdf"),
+                                   paste0(NameString, "_plot_pca_prop_var_", batch, ".pdf")),
+                 exprData1 = exprData1,
+                 exprData2 = exprData2)
+
+    #pearson correlation scatter plot
+    correlationPlot(exprData1 = exprData1,
+                    exprData2 = exprData2,
+                    batch = batch,
+                    fileName = NameString)
+
+    #boxplots before and after batch correction
+    boxplot_data (expr = expr1,
+                  when = "before",
+                  NameString = NameString,
+                  batch = batch)
+    boxplot_data (expr = as.data.frame(expr2),
+                  when = "after",
+                  NameString = NameString,
+                  batch = batch)
 
   }
+  print("========================================================")
+  print(sessionInfo())
 
 }
 

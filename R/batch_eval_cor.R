@@ -1,4 +1,4 @@
-#' @title Batch Evaluation and Correction
+#' @title Batch Effects Evaluation and Correction
 #'
 #'
 #' @description Evaluates if the batch effects with a gene expression dataset using linear
@@ -20,6 +20,9 @@
 #' grouped in discrete batches. If the value is FALSE, contiguous batch information is
 #' clustered into discrete batches using mClust. Useful for clustering batch variables that are
 #' contiguous. Default = TRUE
+#' @param clus.method Method to be used for clustering. "km" denotes k-means, "NMF"
+#' denotes NMF with 30 runs. Default means clustering is done using both the methods.
+#' @param nrun.NMF number of runs for NMF. Default = 30.
 #'
 #' @import utils
 #' @import mclust
@@ -34,7 +37,7 @@
 #'
 #'
 #' @export
-batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete.batch = TRUE){
+batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete.batch = TRUE, clus.method = "both", nrun.NMF = 30){
 
   #reading expression data from file
   print (paste0("Reading gene expression data from ", exprFile))
@@ -47,10 +50,10 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
                         check.names=FALSE)
   } else if (length(grep(pattern = ".csv", exprFile)) ==1){
     expr1 <- read.csv(exprFile,
-                        header = TRUE,
-                        stringsAsFactors = FALSE,
-                        row.names = 1,
-                        check.names=FALSE)
+                      header = TRUE,
+                      stringsAsFactors = FALSE,
+                      row.names = 1,
+                      check.names=FALSE)
   } else{
     stop("exprFile is not a csv or tab-delimited file")
   }
@@ -65,8 +68,8 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
                              sep = "\t")
   } else if (length(grep(pattern = ".csv", batchFile)) ==1){
     batch.info <- read.csv(batchFile,
-                             header = TRUE,
-                             stringsAsFactors = FALSE)
+                           header = TRUE,
+                           stringsAsFactors = FALSE)
   } else{
     stop("batchFile is not a csv or tab-delimited file")
   }
@@ -102,10 +105,12 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
   #linear regression before batch correction
   p_val_before <- lin_reg(exprData=exprData1,
                           batch.info = batch.info,
-                          batch=batch)
+                          batch=batch,
+                          NameString = NameString,
+                          when = "before")
 
   #checking if any of the p values are less than 0.05
-  if(p_val_before[1] >0.05 && p_val_before[2] >0.05){
+  if(all(p_val_before[,2]>0.05)){
     stop("Halting execution since batch is not associated with data...")
 
   }else{
@@ -119,22 +124,44 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
                NameString = NameString,
                when = "before_ComBat_correction")
 
-    #pca with batch and kmeans before batch correction
-    k_before <- kmeans_PCA(exprData = exprData1,
-                          batch.info = batch.info,
-                          batch = batch,
-                          NameString = NameString,
-                          when = "before_correction")
+    #clustering method
+    if(clus.method=="both"){
+      km = TRUE; NMF = TRUE;
+    } else if(clus.method=="km"){
+      km = TRUE; NMF = FALSE;
+    } else if(clus.method=="NMF"){
+      km = FALSE; NMF = TRUE;
+    }
 
+    if(km==TRUE){
+    #pca with batch and kmeans before batch correction
+      k_before <- kmeans_PCA(exprData = exprData1,
+                            batch.info = batch.info,
+                            batch = batch,
+                            NameString = NameString,
+                            when = "before_correction")
+    }
+    if(NMF==TRUE){
+      NMF_PCA(expr=expr1,
+              batch.info = batch.info,
+              nrun = nrun.NMF,
+              batch = batch,
+              NameString = NameString,
+              when = "before_correction")
+    }
     #Batch Correction using ComBat
     expr2 <- ComBat_data (expr = expr1,
-                         batch.info= batch.info,
-                         batch = batch,
-                         NameString = NameString)
+                          batch.info= batch.info,
+                          batch = batch,
+                          NameString = NameString)
     exprData2 <- t(expr2)
 
     #linear regression after batch correction
-    p_val_after <- lin_reg(exprData=exprData2, batch.info = batch.info, batch=batch)
+    p_val_after <- lin_reg(exprData=exprData2,
+                           batch.info = batch.info,
+                           batch=batch,
+                           NameString = NameString,
+                           when = "after")
 
     #pca with batch after correction
     pca_batch (exprData = exprData2,
@@ -143,18 +170,30 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
                NameString = NameString,
                when = "after_ComBat_correction")
 
+    if(km==TRUE){
     #pca with batch and k-means after correction
     k_after <- kmeans_PCA(exprData = exprData2,
                           batch.info = batch.info,
                           batch = batch,
                           NameString = NameString,
                           when = "after_correction")
+    }
+
+    if(NMF==TRUE){
+    #NMF with PCA after correction
+    NMF_PCA(expr=expr2,
+            batch.info = batch.info,
+            nrun = nrun.NMF,
+            batch = batch,
+            NameString = NameString,
+            when = "after_correction")
+    }
 
     #PCA Proportion of Variation
     pca_prop_var(batch.title = batch,
                  plotFile = ifelse(NameString == "",
-                                  paste0("plot_pca_prop_var_", batch, ".pdf"),
-                                  paste0(NameString, "_plot_pca_prop_var_", batch, ".pdf")),
+                                   paste0("plot_pca_prop_var_", batch, ".pdf"),
+                                   paste0(NameString, "_plot_pca_prop_var_", batch, ".pdf")),
                  exprData1 = exprData1,
                  exprData2 = exprData2)
 
@@ -162,19 +201,22 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
     correlationPlot(exprData1 = exprData1,
                     exprData2 = exprData2,
                     batch = batch,
-                    fileName = NameString)
+                    NameString = NameString)
 
     #boxplots before and after batch correction
     boxplot_data (expr = expr1,
                   when = "before",
                   NameString = NameString,
                   batch = batch)
+
     boxplot_data (expr = as.data.frame(expr2),
                   when = "after",
                   NameString = NameString,
                   batch = batch)
 
   }
+  print("========================================================")
+  print(sessionInfo())
 
 }
 
