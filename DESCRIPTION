@@ -17,7 +17,8 @@ Imports: cluster (>= 2.1.0),
         ggplot2 (>= 3.3.2),
         mclust(>= 5.4.6),
         reshape2 (>= 1.4.4),
-        sva (>= 3.36.0)
+        sva (>= 3.36.0), 
+        NMF
 License: `use_mit_license()`, `use_gpl3_license()` or friends to
     pick a license
 Encoding: UTF-8
