@@ -1,6 +1,6 @@
 #' @title PCA plot with NMF cluster information
 #'
-#' @description Clusters the data using NMF (Non-neagtive matrix factorization)
+#' @description Clusters the data using NMF (Non-negative matrix factorization)
 #' after finding the optimal number of clusters in a dataset using the value of
 #' cophenetic coefficients.The results of the clustering are used along with
 #' PCA to see whether all the samples of a batch lie in the same cluster.
