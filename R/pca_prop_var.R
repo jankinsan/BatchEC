@@ -86,6 +86,7 @@ pca_prop_var <- function(batch.title, plotFile, exprData1, exprData2){
 
 
   plot(prop_var_plot)
+  print("Plotted.")
   dev.off()
 
 }

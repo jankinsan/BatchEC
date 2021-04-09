@@ -39,7 +39,7 @@ ComBat_data <- function(expr, batch.info, batch = "Batch", NameString = "")
                                  batch = batch.id,
                                  mod=NULL,
                                  par.prior=TRUE,
-                                 prior.plots=FALSE)
+                                 prior.plots=TRUE)
 
   date <- as.character(format(Sys.Date(), "%Y%m%d"))
   if(NameString==""){

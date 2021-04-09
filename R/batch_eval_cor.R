@@ -21,15 +21,14 @@
 #' clustered into discrete batches using mClust. Useful for clustering batch variables that are
 #' contiguous. Default = TRUE
 #' @param clus.method Method to be used for clustering. "km" denotes k-means, "NMF"
-#' denotes NMF with 30 runs. Default means clustering is done using both the methods.
+#' denotes NMF with 30 runs. Default employs both the methods, using *clus.method= c("NMF", "km")*
 #' @param nrun.NMF number of runs for NMF. Default = 30.
 #'
 #' @import utils
 #' @import mclust
 #'
 #' @examples
-#' \dontrun{
-#' batch_eval_cor(exprFile = "~/exprData.txt",
+#' \dontrun{batch_eval_cor(exprFile = "~/exprData.txt",
 #'                batchFile = "~/batchData.txt",
 #'                Batch = "Batch",
 #'                discrete.batch = TRUE)
@@ -124,16 +123,7 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
                NameString = NameString,
                when = "before_ComBat_correction")
 
-    #clustering method
-    if(clus.method=="both"){
-      km = TRUE; NMF = TRUE;
-    } else if(clus.method=="km"){
-      km = TRUE; NMF = FALSE;
-    } else if(clus.method=="NMF"){
-      km = FALSE; NMF = TRUE;
-    }
-
-    if(km==TRUE){
+    if(any(clus.method=="km")){
     #pca with batch and kmeans before batch correction
       k_before <- kmeans_PCA(exprData = exprData1,
                             batch.info = batch.info,
@@ -141,7 +131,7 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
                             NameString = NameString,
                             when = "before_correction")
     }
-    if(NMF==TRUE){
+    if(any(clus.method=="NMF")){
       NMF_PCA(expr=expr1,
               batch.info = batch.info,
               nrun = nrun.NMF,
@@ -170,7 +160,7 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
                NameString = NameString,
                when = "after_ComBat_correction")
 
-    if(km==TRUE){
+    if(any(clus.method=="km")){
     #pca with batch and k-means after correction
     k_after <- kmeans_PCA(exprData = exprData2,
                           batch.info = batch.info,
@@ -179,7 +169,7 @@ batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete
                           when = "after_correction")
     }
 
-    if(NMF==TRUE){
+    if(any(clus.method=="NMF")){
     #NMF with PCA after correction
     NMF_PCA(expr=expr2,
             batch.info = batch.info,

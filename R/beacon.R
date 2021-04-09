@@ -18,8 +18,8 @@
 #' grouped in discrete batches. If the value is FALSE, contiguous batch information is
 #' clustered into discrete batches. Useful for clustering batch variables that are
 #' contiguous, for example, used reads and useful reads in mClust. Default = TRUE
-#' @param clus.method Method to be used for clustering. "km" denotes k-means, "NMF"
-#' denotes NMF with 30 runs. Default means clustering is done using both the methods.
+#' @param clus.method Method to be used for clustering. "km" denotes k-means clustering, "NMF"
+#' denotes NMF with 30 runs. Default employs both the methods, using *clus.method= c("NMF", "km")*.
 #' @param nrun.NMF number of runs for NMF. Default = 30.
 #'
 #' @import utils
@@ -35,7 +35,7 @@
 #'
 #'
 #' @export
-beacon <- function(expr1, batch.info, batch, NameString = "", discrete.batch = TRUE, clus.method = "both", nrun.NMF = 30){
+beacon <- function(expr1, batch.info, batch, NameString = "", discrete.batch = TRUE, clus.method = c("NMF", "km"), nrun.NMF = 30){
 
   #matching batch
   mat <- match(batch, colnames(batch.info))
@@ -90,16 +90,7 @@ beacon <- function(expr1, batch.info, batch, NameString = "", discrete.batch = T
                NameString = NameString,
                when = "before_ComBat_correction")
 
-    #clustering method
-    if(clus.method=="both"){
-      km = TRUE; NMF = TRUE;
-    } else if(clus.method=="km"){
-      km = TRUE; NMF = FALSE;
-    } else if(clus.method=="NMF"){
-      km = FALSE; NMF = TRUE;
-    }
-
-    if(km==TRUE){
+    if(any(clus.method=="km")){
     #pca with batch and kmeans before batch correction
       k_before <- kmeans_PCA(exprData = exprData1,
                              batch.info = batch.info,
@@ -107,7 +98,7 @@ beacon <- function(expr1, batch.info, batch, NameString = "", discrete.batch = T
                              NameString = NameString,
                              when = "before_correction")
     }
-    if(NMF==TRUE){
+    if(any(clus.method=="NMF")){
       #NMF with PCA before correction
       NMF_PCA(expr=expr1,
               batch.info = batch.info,
@@ -138,7 +129,7 @@ beacon <- function(expr1, batch.info, batch, NameString = "", discrete.batch = T
                NameString = NameString,
                when = "after_ComBat_correction")
 
-    if(km==TRUE){
+    if(any(clus.method=="km")){
     #pca with batch and k-means after correction
     k_after <- kmeans_PCA(exprData = exprData2,
                           batch.info = batch.info,
@@ -146,7 +137,7 @@ beacon <- function(expr1, batch.info, batch, NameString = "", discrete.batch = T
                           NameString = NameString,
                           when = "after_correction")
     }
-    if(NMF==TRUE){
+    if(any(clus.method=="NMF")){
       #NMF with PCA after correction
       NMF_PCA(expr=expr2,
               batch.info = batch.info,
@@ -168,7 +159,7 @@ beacon <- function(expr1, batch.info, batch, NameString = "", discrete.batch = T
     correlationPlot(exprData1 = exprData1,
                     exprData2 = exprData2,
                     batch = batch,
-                    fileName = NameString)
+                    NameString = NameString)
 
     #boxplots before and after batch correction
     boxplot_data (expr = expr1,

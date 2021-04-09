@@ -77,7 +77,8 @@ lin_reg <- function(exprData, batch.info, batch = "Batch", NameString = "", when
 
     ggplot2::geom_boxplot(ggplot2::aes( fill = Batch))+
 
-    ggplot2::labs(x = "Batch", y ="Principal Components")+
+    ggplot2::labs(x = "Batch", y ="Principal Components",
+                  title = "Boxplots showing variation in PCs due to batch")+
 
     ggplot2::scale_fill_manual(values = c("#fcba03",  "#19e01c",
                                                         "#ff470f","#0fdbca",
@@ -108,26 +109,23 @@ lin_reg <- function(exprData, batch.info, batch = "Batch", NameString = "", when
     ggplot2::facet_wrap(.~variable, scales = "free")
 
   plot(boxplot.PC)
+  dev.off()
 
+  #plotting p-values for linear regression for Batch Variation
+  p.val.data <- cbind.data.frame(as.factor(1:10), -log10(p.val))
+  colnames(p.val.data)<- c("PC", "log.p.value")
 
-  #plotting p-values for linear regression for Batch and Biological Variation
-  p.val.data <- cbind.data.frame(as.factor(1:10), p.val)
-  colnames(p.val.data)<- c("PC", "p.value")
-
-  dot.plot <- ggplot2::ggplot(data = p.val.data, ggplot2::aes(x =p.value, y =PC)) +
+  dot.plot <- ggplot2::ggplot(data = p.val.data, ggplot2::aes(x =log.p.value, y =PC)) +
     ggplot2::geom_vline(ggplot2::aes(xintercept = 0.05), size =1,
                         linetype = 'dashed', colour = "dodgerblue3")+
     ggplot2::geom_point(size = 2.5, colour = "orange")+
-    ggplot2::labs(x = "p-value",
+    ggplot2::labs(x = "-log10(p-value)",
                   y = "Principal Components",
                   title = "Plot showing PCs associated with batch") +
 
     ggplot2::theme_classic()
 
   plot(dot.plot)
-
-  dev.off()
-
 
   return(p.val.data)
 }
