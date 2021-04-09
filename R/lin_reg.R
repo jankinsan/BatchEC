@@ -109,14 +109,13 @@ lin_reg <- function(exprData, batch.info, batch = "Batch", NameString = "", when
     ggplot2::facet_wrap(.~variable, scales = "free")
 
   plot(boxplot.PC)
-  dev.off()
 
   #plotting p-values for linear regression for Batch Variation
   p.val.data <- cbind.data.frame(as.factor(1:10), -log10(p.val))
   colnames(p.val.data)<- c("PC", "log.p.value")
 
   dot.plot <- ggplot2::ggplot(data = p.val.data, ggplot2::aes(x =log.p.value, y =PC)) +
-    ggplot2::geom_vline(ggplot2::aes(xintercept = 0.05), size =1,
+    ggplot2::geom_vline(ggplot2::aes(xintercept = -log10(0.05)), size =1,
                         linetype = 'dashed', colour = "dodgerblue3")+
     ggplot2::geom_point(size = 2.5, colour = "orange")+
     ggplot2::labs(x = "-log10(p-value)",
@@ -126,6 +125,7 @@ lin_reg <- function(exprData, batch.info, batch = "Batch", NameString = "", when
     ggplot2::theme_classic()
 
   plot(dot.plot)
+  dev.off()
 
   return(p.val.data)
 }
