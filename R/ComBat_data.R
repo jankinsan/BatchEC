@@ -35,7 +35,7 @@ ComBat_data <- function(expr, batch.info, batch = "Batch", NameString = "")
 
 
   print("Performing batch correction using ComBat...")
-  batch_corrected <- sva::ComBat(dat=expr,
+  batch_corrected <- sva::ComBat(dat=as.matrix(expr),
                                  batch = batch.id,
                                  mod=NULL,
                                  par.prior=TRUE,
