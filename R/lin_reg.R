@@ -40,6 +40,7 @@ lin_reg <- function(exprData, batch.info, batch = "Batch", NameString = "", when
 
   #linear regression to check which PC is associated with batch
   PCs <- colnames(pca_data[, -1])
+  print("CHECKKKKK!!!!")
   lm.pc <- function(x){
     print ("======================================================")
     print(paste0("Performing Linear Regression Analysis for ", x))
@@ -127,7 +128,7 @@ lin_reg <- function(exprData, batch.info, batch = "Batch", NameString = "", when
   plot(dot.plot)
   dev.off()
 
-  return(p.val.data)
+  return(cbind(names(p.val), p.val))
 }
 
 
