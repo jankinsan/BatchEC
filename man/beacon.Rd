@@ -10,7 +10,7 @@ beacon(
   batch,
   NameString = "",
   discrete.batch = TRUE,
-  clus.method = "both",
+  clus.method = c("NMF", "km"),
   nrun.NMF = 30
 )
 }
@@ -29,8 +29,8 @@ grouped in discrete batches. If the value is FALSE, contiguous batch information
 clustered into discrete batches. Useful for clustering batch variables that are
 contiguous, for example, used reads and useful reads in mClust. Default = TRUE}
 
-\item{clus.method}{Method to be used for clustering. "km" denotes k-means, "NMF"
-denotes NMF with 30 runs. Default means clustering is done using both the methods.}
+\item{clus.method}{Method to be used for clustering. "km" denotes k-means clustering, "NMF"
+denotes NMF with 30 runs. Default employs both the methods, using \emph{clus.method= c("NMF", "km")}.}
 
 \item{nrun.NMF}{number of runs for NMF. Default = 30.}
 }

@@ -17,7 +17,8 @@ second column should contain the batch the sample belongs to.}
 \item{batch}{The title of the batch for which you want to evaluate and do the
 correction. Default = "Batch"}
 
-\item{NameString}{String that will be added to the names of all output files. Default=NA.}
+\item{NameString}{String that will be added to the names of all output files.
+Default=NA.}
 }
 \value{
 Returns a matrix containing the batch corrected values for gene expression.

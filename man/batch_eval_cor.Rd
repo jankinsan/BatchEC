@@ -10,7 +10,7 @@ batch_eval_cor(
   batch,
   NameString = "",
   discrete.batch = TRUE,
-  clus.method = "both",
+  clus.method = c("NMF", "km"),
   nrun.NMF = 30
 )
 }
@@ -32,7 +32,7 @@ clustered into discrete batches using mClust. Useful for clustering batch variab
 contiguous. Default = TRUE}
 
 \item{clus.method}{Method to be used for clustering. "km" denotes k-means, "NMF"
-denotes NMF with 30 runs. Default means clustering is done using both the methods.}
+denotes NMF with 30 runs. Default employs both the methods, using \emph{clus.method= c("NMF", "km")}}
 
 \item{nrun.NMF}{number of runs for NMF. Default = 30.}
 }
@@ -45,8 +45,7 @@ Please set your working directory before you call the function as all output fil
 Ensure that you add the correct input file paths.
 }
 \examples{
-\dontrun{
-batch_eval_cor(exprFile = "~/exprData.txt",
+\dontrun{batch_eval_cor(exprFile = "~/exprData.txt",
                batchFile = "~/batchData.txt",
                Batch = "Batch",
                discrete.batch = TRUE)
