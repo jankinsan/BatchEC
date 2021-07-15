@@ -34,6 +34,7 @@ pca_batch <- function(exprData, batch.info, batch, NameString = "", when = ""){
   #calculating the principal components and adding the data to pca_data
   print("Calculating Principal Components...")
   pca.dat <- prcomp(exprData, center = TRUE, scale. = TRUE)
+  print("PCs calculated")
 
 
   pca_data <- cbind.data.frame(pca.dat$x[, 1:2], batch.info[s,2])
@@ -46,7 +47,7 @@ pca_batch <- function(exprData, batch.info, batch, NameString = "", when = ""){
   plotFile <- ifelse (NameString =="",
                       paste0(date, "_plot_", batch, "_pca_", when, ".pdf"),
                       paste0(date, "_plot_", NameString, "_", batch, "_pca_", when, ".pdf"))
-  pdf (plotFile)
+  #pdf (plotFile)
   pca_plot <- ggplot2::ggplot(data = pca_data) +
 
     ggplot2::geom_point(size =6,
@@ -84,10 +85,11 @@ pca_batch <- function(exprData, batch.info, batch, NameString = "", when = ""){
      ggplot2::scale_colour_manual(values=c("#fcba03",  "#19e01c", "#ff470f",
                                            "#0fdbca", "#ff217e","#405ce6",
                                            "#6b6769","#b264ed"))
+  return(pca_plot)
 
-  plot(pca_plot)
-  dev.off()
+  #plot(pca_plot)
+  #dev.off()
 
-  print(paste0("Plotted PC1 & PC2 with batch to ", plotFile))
+  #print(paste0("Plotted PC1 & PC2 with batch to ", plotFile))
 
 }

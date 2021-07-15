@@ -36,7 +36,7 @@
 #'
 #'
 #' @export
-batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete.batch = TRUE, clus.method = "both", nrun.NMF = 30){
+batch_eval_cor <- function(exprFile, batchFile, batch, NameString = "", discrete.batch = TRUE, clus.method = c("NMF", "km"), nrun.NMF = 30){
 
   #reading expression data from file
   print (paste0("Reading gene expression data from ", exprFile))
